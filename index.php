@@ -2,12 +2,13 @@
 
 <?php
 $page = "Home";
-include_once("header.php"); 
+include_once("header.php");
 ?>
 
     <body>
         <div id="main">
             <?php
+            include_once("navbar.php");
             if (empty($_SESSION['username'])){
                 echo "<p>You are not using a registered session?<p>";
                 echo "<a href='registration.php'>Register now</a>";

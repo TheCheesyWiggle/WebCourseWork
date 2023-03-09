@@ -12,6 +12,9 @@ include("header.php");
         <form action="index.php">
             <label for="name">Username:</label><br>
             <input type="text" id="name" name="name"><br>
+            <?php
+            //if username contains invaild characters show error tag
+            ?>
         </form>
         <?php
             $_SESSION["username"] = $_GET['name'];
