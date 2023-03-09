@@ -9,7 +9,7 @@
     nav{
         padding: 10px;
         background-color: blue;
-
+        width: 100%;
     }
     ul{
         
