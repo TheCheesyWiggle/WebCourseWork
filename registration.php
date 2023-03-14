@@ -1,23 +1,53 @@
-// set session variables and cookies for user profile
-// registration includes: Username + Avatar selector
-// Username cannot have (: ” ! @ # % ˆ& * ( ) + = { } [ ] — ; : “ ’ < > ? /)
-// Avatar selector select and configure features to assemble an emoji Avatar/image
+
+<style>
+    form{
+        margin-top: 100px;
+        background-color: grey;
+        box-shadow: 5px;
+        border-radius: 25px;
+    }
+    label, input, button{
+        margin-left: 20%;
+        color: black;
+
+    }
+
+    label{
+        color: white;
+    }
+
+    button{
+        background-color: blue;
+        color: white;
+        font-family: Verdana;
+        border-style: none;
+        border-radius: 25px;
+        padding: 7.5px;
+        margin-top: 5px;
+        margin-bottom: 5px;
+    }
+    
+</style>
 <?php
-session_start();
-$page = "Registration";
-$cookie_name = "user";
+$page = "Register";
 include("header.php");
 ?>
     <body>
-        <form action="index.php">
-            <label for="name">Username:</label><br>
-            <input type="text" id="name" name="name"><br>
-            <?php
-            //if username contains invaild characters show error tag
+        <div id="main">
+            <?php 
+            include("navbar.php");
             ?>
-        </form>
-        <?php
-            $_SESSION["username"] = $_GET['name'];
-        ?>
+            <div>
+                <form action="index.php">
+                    <label for="username">Username:</label><br>
+                    <input type="text" id="name" name="name"><br>
+                    <label for="avatar">Avatar:</label><br>
+                    <input type="text" id="name" name="name"><br>
+                    <button type="submit" name="submit">Register</button>
+                </form>
+            </div>
+        </div>
     </body>
 </html>
+
+

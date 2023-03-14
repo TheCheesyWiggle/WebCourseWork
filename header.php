@@ -7,5 +7,4 @@
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
         <title><?php echo $page?></title>
         <link rel="stylesheet" href="global.css" type="text/css">
-        <link rel="icon" href="./favicon.ico" type="image/x-icon">
     </head>
