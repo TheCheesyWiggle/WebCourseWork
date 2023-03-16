@@ -6,8 +6,6 @@
         border-radius: 25px;
 
         text-align: center;
-        margin: 20% 50% 60%;
-        padding: 10px;
         width: 40%;
         min-width: 160px;
         max-width: 350px;
