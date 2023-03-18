@@ -4,7 +4,9 @@
         background-color: blue;
         color: white;
         border-radius: 25px;
-
+        position: absolute;
+        top: 50%;
+        left: 50%;
         text-align: center;
         width: 40%;
         min-width: 160px;
