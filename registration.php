@@ -29,7 +29,7 @@
     
 </style>
 <?php
-$page = "Register";
+$page = "Registration";
 include("header.php");
 ?>
     <body>
@@ -40,9 +40,9 @@ include("header.php");
             <div>
                 <form action="index.php">
                     <label for="username">Username:</label><br>
-                    <input type="text" id="name" name="name"><br>
+                    <input type="text" id="username" name="username"><br>
                     <label for="avatar">Avatar:</label><br>
-                    <input type="text" id="name" name="name"><br>
+
                     <button type="submit" name="submit">Register</button>
                 </form>
             </div>

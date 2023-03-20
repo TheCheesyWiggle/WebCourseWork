@@ -26,7 +26,7 @@ include_once("header.php");
             <div id="content">
                 <div>
                     <?php
-                    if (empty($_SESSION['username'])){
+                    if (!isset($_SESSION["username"])){;
                         echo "<p>You are not using a registered session?<p>";
                         echo "<a href='registration.php'>Register now</a>";
                     }else{

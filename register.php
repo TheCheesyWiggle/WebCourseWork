@@ -1,14 +1,11 @@
 
 <?php
-$page = "Register";
 
 session_start();
-echo session_id().'<br>';
 
-include("header.php");
+$_SESSION["username"] = $_GET["username"];
+
+header("index.php");
+
+echo "<script>console.log('Debug Objects: " . $_SESSION["username"]. "' );</script>";
 ?>
-    <body>
-        <div id="main">
-            
-        </div>
-    </bod
