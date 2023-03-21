@@ -16,6 +16,7 @@
 <?php
 $page = "Home";
 include_once("header.php");
+$_SESSION["username"] = $_GET["username"];
 ?>
 
     <body>

@@ -29,6 +29,7 @@
     
 </style>
 <?php
+session_start();
 $page = "Registration";
 include("header.php");
 ?>
@@ -38,15 +39,17 @@ include("header.php");
             include("navbar.php");
             ?>
             <div>
-                <form action="index.php">
-                    <label for="username">Username:</label><br>
-                    <input type="text" id="username" name="username"><br>
-                    <label for="avatar">Avatar:</label><br>
-
-                    <button type="submit" name="submit">Register</button>
+                <form id="user" action="index.php" method="get">
+                Username: <input type="text" name="username"><br><br>
+                <input type="submit" onclick="myFunction()">
                 </form>
             </div>
         </div>
+        <script>
+            function getDetails(){
+                document.getElementById("user").submit();
+            }
+        </script>
     </body>
 </html>
 
