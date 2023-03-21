@@ -27,7 +27,7 @@ $_SESSION["username"] = $_GET["username"];
             <div id="content">
                 <div>
                     <?php
-                    if (!isset($_SESSION["username"])){;
+                    if (empty($_SESSION["username"])){;
                         echo "<p>You are not using a registered session?<p>";
                         echo "<a href='registration.php'>Register now</a>";
                     }else{
