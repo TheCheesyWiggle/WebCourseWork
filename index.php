@@ -16,7 +16,6 @@
 <?php
 $page = "Home";
 include_once("header.php");
-$_SESSION["username"] = $_GET["username"];
 ?>
 
     <body>
@@ -27,7 +26,7 @@ $_SESSION["username"] = $_GET["username"];
             <div id="content">
                 <div>
                     <?php
-                    if (empty($_SESSION["username"])){;
+                    if (!isset($_SESSION["insession"])){;
                         echo "<p>You are not using a registered session?<p>";
                         echo "<a href='registration.php'>Register now</a>";
                     }else{
