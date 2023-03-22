@@ -148,10 +148,10 @@ include("header.php");
     <?php
     if (isset($_POST["submit-btn"])) {
         $_SESSION["insession"] = true;
-        setcookie("username", $_POST["username"]);
-        setcookie("skin", $_POST["skin"]);
-        setcookie("eyes",$_POST["eyes"]);
-        setcookie("mouth",$_POST["mouth"]);
+        setcookie('username', $_POST['username']);
+        setcookie('skin', $_POST['skin']);
+        setcookie('eyes',$_POST['eyes']);
+        setcookie('mouth',$_POST['mouth']);
     }
     ?>
 </body>
