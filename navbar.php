@@ -34,7 +34,6 @@
             if (!isset($_SESSION["insession"])){
                 echo "<li style='float:right; padding-right: 2.5%'>"+$_COOKIE["skin"]+"</li>";
                 echo "<li style='float:right; padding-right: 2.5%''><a href='leaderboard.php'>Leaderboard</a></li>";
-                
             }
             else{
                 echo "<li style='float:right; padding-right: 2.5%'><a href='registration.php'>Register</a></li>";

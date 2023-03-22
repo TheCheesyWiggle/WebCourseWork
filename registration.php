@@ -151,7 +151,7 @@ include("header.php");
         setcookie("username", $_POST["username"]);
         setcookie("skin", $_POST["skin"]);
         setcookie("eyes",$_POST["eyes"]);
-        setcookie("mouth",$_POST["mouth"]);   
+        setcookie("mouth",$_POST["mouth"]);
     }
     ?>
 </body>
