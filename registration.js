@@ -5,19 +5,10 @@ let skin_index = 1;
 let eyes_index = 1;
 let mouth_index = 1;
 
-function add_image_s() {
-    var img = new Image();
-    img.src = "assets/emoji-assets/skin"+ skin[skin_index];
-    document.getElementById('emoji').appendChild(img);
-    down.innerHTML = "Image Element Added.";
+function change_skin(index) {
+    var image = document.getElementById('skin');
+    skin_index = skin_index+index;
+    image.src = "assets/emoji-assets/skin/"+skin_index;
+    console.write   
 }
-function add_image_e() {
-    var img = new Image();
-    img.src = "assets/emoji-assets/skin"+ skin[skin_index];
-    document.getElementById('emoji').appendChild(img);
-}
-function add_image_m() {
-    var img = new Image();
-    img.src = "assets/emoji-assets/skin"+ skin[skin_index];
-    document.getElementById('emoji').appendChild(img);
-}
+
