@@ -71,7 +71,9 @@ include("header.php");
         ?>
         <div>
             <form id="user" method="post">
-                Username: <input type="text" name="username"><br><br>
+                Username: <input type="text" name="username"><br>
+                Cannot Inlude: ” ! @ # % ˆ& * ( ) + = { } [ ] — ; : “ ’ < > ? /
+                <br>
                 <p>Skin</p>
                 <div class="grid-container-skin">
                     <div class="grid-item">
@@ -130,7 +132,7 @@ include("header.php");
                     </div>
                     <div class="grid-item">
                         <img class="image" src="assets/emoji-assets/mouth/straight.png" alt="Straight">
-                        <input type="radio" name="mouth" value="straight2>
+                        <input type="radio" name="mouth" value="straight">
                         </div>
                         <div class=" grid-item">
                         <img class="image" src="assets/emoji-assets/mouth/surprise.png" alt="Surprise">
