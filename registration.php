@@ -138,9 +138,11 @@ include("header.php");
     }
 
     function change_eyes(index) {
-        var image  = document.getElementById('eyes');
-        image.src = "assets/emoji-assets/eyes/"+eyes[2];
-        window.alert("change skin");
+        const source ="assets/emoji-assets/eyes/normal.png";
+        const img = document.querySelector('#eyes');
+        console.log(document.querySelector('#eyes').getAttribute("src"));
+        img.removeAttribute("src");
+        console.log(document.querySelector('#eyes').getAttribute("src"));
     }
     function change_mouth(index) {
         var image  = document.getElementById('mouth');
@@ -152,6 +154,8 @@ include("header.php");
         const invalidChars = /[!@#%^&*()+={}\[\]\—;:'"<>\?/]/;
         if (invalidChars.test(document.getElementById("username").value)) {
             alert("Error: Username contains invalid characters.");
+        } else if(document.getElementById("username").length<0){
+            alert("Error: No characters.");
         } else {
             alert("Username is valid.");
         }
