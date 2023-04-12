@@ -7,6 +7,7 @@
         margin-top: 5rem;
         padding-bottom: 25px;
         border-radius: 25px;
+        box-shadow: 5px;
     }
 
     h1 {
@@ -19,7 +20,6 @@
         flex-wrap: wrap;
         margin-top: 2rem;
         justify-content: center;
-        box-shadow: 5px;
     }
     .card {
         background-color: transparent;
@@ -98,7 +98,7 @@
             ?>
             <div class="container">
                 <h1>Memory Game</h1>
-                <button id="start-btn" onclick="hideBtn()">Start the game</button>
+                <button id="start-btn" onclick="start()">Start the game</button>
                 <p>Attempts: <span id="attempts">1</span></p>
                 <p>Score: <span id="score">0</span></p>
                 <div id="game-board">

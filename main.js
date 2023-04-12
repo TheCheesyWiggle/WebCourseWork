@@ -13,6 +13,15 @@ let firstCard, secondCard;
 let attempts = 1;
 let score = 0;
 
+function start(){
+    hideBtn();
+    setupBoard();
+}
+
+//sets up the board
+function setupBoard(){
+    shuffle();
+}
 
 // Shuffle cards function
 function shuffle() {
@@ -25,6 +34,20 @@ function shuffle() {
 // Flip card function
 function flipCard() {
     //flips the card face up
+    if (lockBoard) return;
+    if (this === firstCard) return;
+    this.classList.add('card-back');
+
+    if (!hasFlippedCard) {
+        // First card
+        hasFlippedCard = true;
+        firstCard = this;
+    } else {
+        // Second card
+        hasFlippedCard = false;
+        secondCard = this;
+        checkForMatch();
+    }
 }
 
 // Check for card match function
@@ -36,16 +59,31 @@ function checkForMatch() {
 // Disable matched cards function
 function disableCards() {
     //keeps matched cards face up
+    firstCard.removeEventListener('click', flipCard);
+    secondCard.removeEventListener('click', flipCard);
+    score++;
+    scoreDisplay.textContent = score;
+    resetBoard();
 }
 
 // Unflip non-matching cards function
 function unflipCards() {
     // returns cards if match is false
+    lockBoard = true;
+    attempts++;
+    attemptsDisplay.textContent = attempts;
+    setTimeout(() => {
+        firstCard.classList.remove('card-front');
+        secondCard.classList.remove('card-front');
+        resetBoard();
+    }, 1000);
 }
 
 // Reset board function
 function resetBoard() {
     // resets board after guess
+    [hasFlippedCard, lockBoard] = [false, false];
+    [firstCard, secondCard] = [null, null];
 }
 
 // Check for Game End
@@ -56,7 +94,6 @@ function checkEndOfGame() {
 
 // Reset game function
 function resetGame() {
-    // resets the game
     attempts = 1;
     score = 0;
     attemptsDisplay.textContent = attempts;
@@ -64,8 +101,7 @@ function resetGame() {
     shuffle();
 }
 
-resetBtn.addEventListener('click', resetGame);
-
+// Hides the start button
 function hideBtn(){
     startBtn.classList.add("disappear");
     shuffle();
@@ -73,3 +109,9 @@ function hideBtn(){
         card.addEventListener('click', flipCard);
     });
 }
+
+
+// Event Listeners
+resetBtn.addEventListener('click', resetGame);
+startBtn.addEventListener('click', start);
+
