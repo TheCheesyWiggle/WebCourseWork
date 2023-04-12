@@ -22,27 +22,46 @@
         box-shadow: 5px;
     }
     .card {
+        background-color: transparent;
         width: 100px;
         height: 100px;
-        margin: 10px;
-        position: relative;
-        cursor: pointer;
-        transform-style: preserve-3d;
-        transition: transform 0.5s;
+        perspective: 1000px;
+        border: solid grey;
+        margin: 5px;
     }
-    .card img {
-        width: 100%;
-        height: 100%;
-        backface-visibility: hidden;
-        position: absolute;
-        top: 0;
-        left: 0;
+    .card-inner {
+        position: relative;
+        width: 100px;
+        height: 100px;
+        text-align: center;
+        transition: transform 0.5s;
+        transform-style: preserve-3d;
+        border: 2px solid black;
     }
 
-    .card.active {
+    .card:active, .card-inner:active {
         transform: rotateY(180deg);
     }
 
+    .card-front, .card-back {
+        position: absolute;
+        width: 100px;
+        height: 100px;
+        backface-visibility: hidden;
+    }
+    .card-front {
+        background-color: blue;
+       
+    }
+    .card-back img, .card-front img{
+        height: 100px;
+        width: 100px;
+    }
+
+    .card-back {
+        background-color: white;
+        transform: rotateY(180deg);
+    }
 
     #start-btn,
     #reset-btn {
@@ -83,12 +102,66 @@
                 <p>Attempts: <span id="attempts">1</span></p>
                 <p>Score: <span id="score">0</span></p>
                 <div id="game-board">
-                    <div class="card" data-card="1"><img src="assets/emoji-assets/skin/green.png"></div>
-                    <div class="card" data-card="2"><img src="assets/emoji-assets/skin/red.png"></div>
-                    <div class="card" data-card="3"><img src="assets/emoji-assets/skin/yellow.png"></div>
-                    <div class="card" data-card="1"><img src="assets/emoji-assets/skin/green.png"></div>
-                    <div class="card" data-card="2"><img src="assets/emoji-assets/skin/red.png"></div>
-                    <div class="card" data-card="3"><img src="assets/emoji-assets/skin/yellow.png"></div>
+                    <div class="card" data-card="1">
+                        <div class="card-inner">
+                            <div class="card-front">
+                                <img src="assets/card-back.jpg">
+                            </div>
+                            <div class="card-back">
+                                <img src="assets/emoji-assets/skin/green.png">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card" data-card="2">
+                        <div class="card-inner">
+                            <div class="card-front">
+                                <img src="assets/card-back.jpg">
+                            </div>
+                            <div class="card-back">
+                                <img src="assets/emoji-assets/skin/red.png">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card" data-card="3">
+                        <div class="card-inner">
+                            <div class="card-front">
+                                <img src="assets/card-back.jpg">
+                            </div>
+                            <div class="card-back">
+                                <img src="assets/emoji-assets/skin/yellow.png">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card" data-card="4">
+                        <div class="card-inner">
+                            <div class="card-front">
+                                <img src="assets/card-back.jpg">    
+                            </div>
+                            <div class="card-back">
+                                <img src="assets/emoji-assets/skin/green.png">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card" data-card="5">
+                        <div class="card-inner">
+                            <div class="card-front">
+                                <img src="assets/card-back.jpg">
+                            </div>
+                            <div class="card-back">
+                                <img src="assets/emoji-assets/skin/red.png">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card" data-card="6">
+                        <div class="card-inner">
+                            <div class="card-front">
+                                <img src="assets/card-back.jpg">
+                            </div>
+                            <div class="card-back">
+                                <img src="assets/emoji-assets/skin/yellow.png">
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <button id="reset-btn">Reset Game</button>
             <script src="main.js"></script>
