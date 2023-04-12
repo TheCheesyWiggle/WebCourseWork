@@ -10,8 +10,6 @@ const gameBoard = document.getElementById('game-board');
 
 // Variables
 let firstCard, secondCard;
-let hasFlippedCard = false;
-let lockBoard = false;
 let attempts = 1;
 let score = 0;
 
@@ -26,20 +24,7 @@ function shuffle() {
 
 // Flip card function
 function flipCard() {
-    if (lockBoard) return;
-    if (this === firstCard) return;
-    this.classList.add('flip');
-
-    if (!hasFlippedCard) {
-        // First card
-        hasFlippedCard = true;
-        firstCard = this;
-    } else {
-        // Second card
-        hasFlippedCard = false;
-        secondCard = this;
-        checkForMatch();
-    }
+    //flips the card face up
 }
 
 // Check for card match function
@@ -50,46 +35,28 @@ function checkForMatch() {
 
 // Disable matched cards function
 function disableCards() {
-    firstCard.removeEventListener('click', flipCard);
-    secondCard.removeEventListener('click', flipCard);
-    score++;
-    scoreDisplay.textContent = score;
-    resetBoard();
-    checkForWin();
+    //keeps matched cards face up
 }
 
 // Unflip non-matching cards function
 function unflipCards() {
-    lockBoard = true;
-    attempts++;
-    attemptsDisplay.textContent = attempts;
-    setTimeout(() => {
-        firstCard.classList.remove('flip');
-        secondCard.classList.remove('flip');
-        resetBoard();
-    }, 1000);
+    // returns cards if match is false
 }
 
 // Reset board function
 function resetBoard() {
-    [hasFlippedCard, lockBoard] = [false, false];
-    [firstCard, secondCard] = [null, null];
+    // resets board after guess
 }
 
-// Check for win function
-function checkForWin() {
-    if (score === 3) {
-        alert(`Congratulations! You won in ${attempts} attempts.`);
-        resetGame();
-    }
+// Check for Game End
+function checkEndOfGame() {
+    //all cards turned over
+    //ask user to add to leader board
 }
 
 // Reset game function
 function resetGame() {
-    cards.forEach(card => {
-        card.classList.remove('flip');
-        card.addEventListener('click', flipCard);
-    });
+    // resets the game
     attempts = 1;
     score = 0;
     attemptsDisplay.textContent = attempts;

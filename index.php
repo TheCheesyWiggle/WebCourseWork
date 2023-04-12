@@ -24,18 +24,21 @@ include_once("header.php");
             include_once("navbar.php");
             ?>
             <div id="content">
-                <div>
-                    <?php
-                    if (!isset($_SESSION["insession"])){;
-                        echo "<p>You are not using a registered session?<p>";
-                        echo "<a href='registration.php'>Register now</a>";
-                    }else{
-                        echo "<p>Welcome to Pairs</p>";
-                        echo "<a href='pairs.php'>Click here to play!</a>";
-                    }
-                    ?>
-                </div>
             </div>
         </div>
     </body>
 </html>
+<script>
+
+    let button = "";
+
+    if (sessionStorage.getItem("insession")) {
+        button += "<p>Welcome to Pairs</p>"
+            +"<a href='pairs.php'>Click here to play!</a>";
+    } else {
+        button += "<p>You are not using a registered session?<p>"
+            +"<a href='registration.php'>Register now</a>";
+    }
+
+    document.getElementById("content").innerHTML = button;
+</script>
