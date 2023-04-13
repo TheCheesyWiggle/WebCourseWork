@@ -39,7 +39,7 @@
         border: 2px solid black;
     }
 
-    .card:active, .card-inner:active {
+    .flipped {
         transform: rotateY(180deg);
     }
 
@@ -132,7 +132,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="card" data-card="4">
+                    <div class="card" data-card="1">
                         <div class="card-inner">
                             <div class="card-front">
                                 <img src="assets/card-back.jpg">    
@@ -142,7 +142,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="card" data-card="5">
+                    <div class="card" data-card="2">
                         <div class="card-inner">
                             <div class="card-front">
                                 <img src="assets/card-back.jpg">
@@ -152,7 +152,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="card" data-card="6">
+                    <div class="card" data-card="3">
                         <div class="card-inner">
                             <div class="card-front">
                                 <img src="assets/card-back.jpg">
