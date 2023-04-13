@@ -3,14 +3,14 @@
     #content{
         background-color: blue;
         color: white;
-        border-radius: 25px;
-        position: absolute;
-        top: 50%;
-        left: 50%;
+        margin-top: 17.5rem;
         text-align: center;
-        width: 40%;
+        border-radius: 20px;
         min-width: 160px;
         max-width: 350px;
+        margin-left: auto;
+        margin-right: auto;
+        width: 50%;
     }
 </style>
 <?php

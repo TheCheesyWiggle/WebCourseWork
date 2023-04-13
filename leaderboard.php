@@ -30,12 +30,17 @@
     }
 
     th, td{
-        background-color: blue;
         padding: 5px;
-        border-radius: 7.5px;
         color: white;
     }
 
+    th{
+        background-color: blue;
+    }
+
+    td {
+        background-color: darkgrey;
+    }
 </style>
 
 <?php

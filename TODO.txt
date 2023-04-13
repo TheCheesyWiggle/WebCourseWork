@@ -1,12 +1,6 @@
 Add score to the leaderboard
-- Load JSON
 - Add to JSON
-- Sort list
 - Save JSON
-
-leaderboard.php
-- Load JSON
-- Populate leaderboard
 
 Medium
 - Randomly generate cards

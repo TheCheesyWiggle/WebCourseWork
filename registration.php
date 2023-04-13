@@ -181,12 +181,13 @@ session_start();
         // validates the username
         function validation(){
             const invalidChars = /[!@#%^&*()+={}\[\]\—;:'"<>\?/]/;
-            const username = document.getElementById("username").value
-            if (invalidChars.test(username.value)) {
+            const username = document.getElementById("username").value;
+            console.log("Invalid chars: "+ invalidChars.test(username.value));
+            if (invalidChars.test(username)) {
                 alert("Error: Username contains invalid characters.");
                 document.getElementById("user").reset(); 
-            } else if(document.getElementById("username").length<0){
-                alert("Error: No characters.");
+            } else if(document.getElementById("username").value.length<=0){
+                alert("Error: Username needs to contain characters");
                 document.getElementById("user").reset(); 
             } else {
 
