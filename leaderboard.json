@@ -1,0 +1,19 @@
+{
+    "scores":[
+        {"username":"John",
+        "skin":"assets/emoji-assets/skin/green.png",
+        "eyes":"assets/emoji-assets/eyes/closed.png",
+        "mouth":"assets/emoji-assets/mouth/smiling.png",
+        "score": 100},
+        {"username":"Anna", 
+        "skin":"assets/emoji-assets/skin/red.png",
+        "eyes":"assets/emoji-assets/eyes/laughing.png",
+        "mouth":"assets/emoji-assets/mouth/teeth.png",
+        "score": 60},
+        {"username":"Peter", 
+        "skin":"assets/emoji-assets/skin/yellow.png",
+        "eyes":"assets/emoji-assets/eyes/long.png",
+        "mouth":"assets/emoji-assets/mouth/straight.png",
+        "score": 30}
+    ]
+}

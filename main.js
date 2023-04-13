@@ -9,6 +9,7 @@ const scoreDisplay = document.getElementById('score');
 const gameBoard = document.getElementById('game-board');
 
 // Variables
+let leaderboard;
 let firstCard, secondCard;
 let attempts = 1;
 let score = 0;
@@ -20,6 +21,7 @@ const eyes =  ["closed.png","laughing.png","long.png","normal.png","rolling.png"
 const mouth = ["open.png","sad.png","smiling.png","straight.png","surprise.png","teeth.png"];
 
 function start(){
+
     hideBtn();
     resetGame();
 }
@@ -139,15 +141,40 @@ function AddToJSON(data){
 
 }
 
-function getJSON(){
+function loadJSON(){
+    console.log("[JSON] Loading...");
+    // Create a new XMLHttpRequest object
+    const xhr = new XMLHttpRequest();
+    xhr.open('GET', 'leaderboard.json');
+    xhr.responseType = 'json';
+    // Send the request to retrieve the JSON data
+    xhr.send();
     
-    fetch('./leaderboard.json')
-        .then((response) => response.json())
-        .then((json) => console.log(json));
-
+    xhr.onload = function() {
+        // Check status code to see id it was succesfull
+        if (xhr.status === 200) {
+            leaderboard = xhr.response;
+        }
+    };
 }
-function saveJSON(){
 
+function saveJSON(){
+    // Make a PUT request to overwrite the file
+    console.log("[JSON] Overwriting...");
+    fetch('leaderboard.json', {
+        method: 'PUT',
+        headers: {
+        'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(leaderboard),
+    })
+    .then(response => {
+        console.log('Data Overwritten successfully!');
+    })
+    .catch(error => {
+        console.error('Error adding data:', error);
+    });
+    console.log("[JSON] Finished");
 }
 
 
