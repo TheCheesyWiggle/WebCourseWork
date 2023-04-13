@@ -73,7 +73,8 @@ function createBoard(setupCards) {
 function resetCards() {
     cards.forEach(card => {
         card.classList.remove("flipped");
-        card.childNodes[1].classList.remove("flipped");
+        console.log(card.childNodes);
+        card.childNodes[0].classList.remove("flipped");
         card.addEventListener("click", flipCard);
     });
 }
@@ -95,7 +96,7 @@ function flipCard() {
     if (this === firstCard) { return };
     // Add flipped class to show the card face
     this.classList.add("flipped");
-    this.childNodes[1].classList.add("flipped");
+    this.childNodes[0].classList.add("flipped");
     if (!hasFlippedCard) {
         // This is the first card flipped
         hasFlippedCard = true;
@@ -118,9 +119,9 @@ function flipCard() {
         lockBoard = true;
         setTimeout(() => {
             firstCard.classList.remove("flipped");
-            firstCard.childNodes[1].classList.remove("flipped");
+            firstCard.childNodes[0].classList.remove("flipped");
             secondCard.classList.remove("flipped");
-            secondCard.childNodes[1].classList.remove("flipped");
+            secondCard.childNodes[0].classList.remove("flipped");
             lockBoard = false;
             attempts++;
             document.getElementById("attempts").textContent = attempts;
@@ -213,9 +214,9 @@ function genCards() {
 
 function createCard(skinURL, eyesURL, mouthURL, data) {
     const card = {
-        "skin": skinURL,
-        "eyes": eyesURL,
-        "mouth": mouthURL,
+        "skinURL": skinURL,
+        "eyesURL": eyesURL,
+        "mouthURL": mouthURL,
         "data": data,
     }
     return card;

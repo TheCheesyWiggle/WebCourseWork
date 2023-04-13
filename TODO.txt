@@ -3,9 +3,8 @@ Add score to the leaderboard
 - Save JSON
 
 Medium
-- Randomly generate cards
-- Populate game board
 - Add time element to score
+- check for repeats
 
 Complex
 - Add level progression

@@ -1,6 +1,6 @@
 <style>
     .container {
-        max-width: 800px;
+        max-width: 600px;
         margin: 0 auto;
         text-align: center;
         background-color: grey;
@@ -91,7 +91,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        height: 25px;
+        height: 100px;
     }
 
     #skin-game, #eyes-game, #mouth-game {
