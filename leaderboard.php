@@ -62,7 +62,7 @@
 </html>
 
 <script>
-    var leaderboard =[];
+    var leaderboard = [];
 
     // Adds scores to the leader board
     function displayLeaderboard(){

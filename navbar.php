@@ -25,6 +25,7 @@
         font-weight: bold;
         font-size: 12px;
     }
+    
     #emoji_nav{
         display: flex;
         align-items: center;

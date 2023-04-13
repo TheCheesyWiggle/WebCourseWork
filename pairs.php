@@ -86,6 +86,25 @@
     #reset-btn {
         margin-left: 1rem;
     }
+
+    #emoji-game{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 25px;
+    }
+
+    #skin-game, #eyes-game, #mouth-game {
+        height: 100px;
+        margin: 0 10px;
+        position: absolute;
+        top: auto;
+        left: auto;
+    }
+
+    #eyes-game{
+        margin-bottom: 5px;
+    }
 </style>
 
 <?php
@@ -103,66 +122,7 @@
                 <p>Attempts: <span id="attempts">1</span></p>
                 <p>Score: <span id="score">0</span></p>
                 <div id="game-board">
-                    <div class="card" data-card="1">
-                        <div class="card-inner">
-                            <div class="card-front">
-                                <img src="assets/card-back.jpg">
-                            </div>
-                            <div class="card-back">
-                                <img src="assets/emoji-assets/skin/green.png">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card" data-card="2">
-                        <div class="card-inner">
-                            <div class="card-front">
-                                <img src="assets/card-back.jpg">
-                            </div>
-                            <div class="card-back">
-                                <img src="assets/emoji-assets/skin/red.png">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card" data-card="3">
-                        <div class="card-inner">
-                            <div class="card-front">
-                                <img src="assets/card-back.jpg">
-                            </div>
-                            <div class="card-back">
-                                <img src="assets/emoji-assets/skin/yellow.png">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card" data-card="1">
-                        <div class="card-inner">
-                            <div class="card-front">
-                                <img src="assets/card-back.jpg">    
-                            </div>
-                            <div class="card-back">
-                                <img src="assets/emoji-assets/skin/green.png">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card" data-card="2">
-                        <div class="card-inner">
-                            <div class="card-front">
-                                <img src="assets/card-back.jpg">
-                            </div>
-                            <div class="card-back">
-                                <img src="assets/emoji-assets/skin/red.png">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card" data-card="3">
-                        <div class="card-inner">
-                            <div class="card-front">
-                                <img src="assets/card-back.jpg">
-                            </div>
-                            <div class="card-back">
-                                <img src="assets/emoji-assets/skin/yellow.png">
-                            </div>
-                        </div>
-                    </div>
+                    <!-- Game Board dynamically generated -->
                 </div>
                 <button id="reset-btn">Reset Game</button>
             <script src="main.js"></script>

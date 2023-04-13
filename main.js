@@ -1,7 +1,5 @@
-
-
 // Get DOM elements
-const cards = document.querySelectorAll('.card');
+let cards = document.querySelectorAll('.card');
 const startBtn = document.getElementById('start-btn');
 const resetBtn = document.getElementById('reset-btn');
 const attemptsDisplay = document.getElementById('attempts');
@@ -17,16 +15,14 @@ let hasFlippedCard = false;
 let lockBoard = false;
 // Arrays
 var leaderboard = [];
-var newCards=[];
-const skin = ["green.png","red.png","yellow.png"];
-const eyes =  ["closed.png","laughing.png","long.png","normal.png","rolling.png","winking.png"];
-const mouth = ["open.png","sad.png","smiling.png","straight.png","surprise.png","teeth.png"];
 
-function start(){
+function start() {
+    cards = document.querySelectorAll('.card');
+    console.log(cards);
     genCards();
     loadJSON();
     hideBtn();
-    resetGame();
+    setupGame();
 }
 
 // Shuffle cards function
@@ -37,18 +33,44 @@ function shuffle() {
     });
 }
 
-// Reset game function
-function resetGame() {
+// Setup game function
+function setupGame() {
     attempts = 1;
     score = 0;
     count = 0;
     attemptsDisplay.textContent = attempts;
     scoreDisplay.textContent = score;
+    createBoard(genCards());
     shuffle();
     resetCards();
 }
+
+function createBoard(setupCards) {
+    console.log(setupCards);
+    let html = "";
+    for (let i = 0; i < 10; i++) {
+        html += "" 
+                +"<div class='card' data-card='" + setupCards[i].data + "'>"
+                    + "<div class='card-inner'>"
+                        + "<div class='card-front'>"
+                            + "<img src='assets/card-back.jpg'>"
+                        + "</div>"
+                        + "<div class='card-back'>"
+                            + "<div id = 'emoji-game'>"
+                                +"<img id='skin-game' src='"+setupCards[i].skinURL+"'>"
+                                +"<img id='eyes-game' src='"+setupCards[i].eyesURL+"'>"
+                                +"<img id='mouth-game' src='"+setupCards[i].mouthURL+"'>"
+                            +"</div>"
+                        + "</div>"
+                    + "</div>"
+                + "</div>"
+    }
+    document.getElementById("game-board").innerHTML = html;
+    cards = document.querySelectorAll('.card');
+}
+
 // Resets cards
-function resetCards(){
+function resetCards() {
     cards.forEach(card => {
         card.classList.remove("flipped");
         card.childNodes[1].classList.remove("flipped");
@@ -57,7 +79,7 @@ function resetCards(){
 }
 
 // Hides the start button
-function hideBtn(){
+function hideBtn() {
     startBtn.classList.add("disappear");
     shuffle();
     cards.forEach(card => {
@@ -66,44 +88,45 @@ function hideBtn(){
 }
 
 function flipCard() {
+    console.log("FLIP")
     // Lock the board if there are two cards flipped
-    if (lockBoard) {return};
+    if (lockBoard) { return };
     // Don't allow the same card to be flipped twice
-    if (this === firstCard){return};
+    if (this === firstCard) { return };
     // Add flipped class to show the card face
     this.classList.add("flipped");
     this.childNodes[1].classList.add("flipped");
     if (!hasFlippedCard) {
-      // This is the first card flipped
-      hasFlippedCard = true;
-      firstCard = this;
-      return;
+        // This is the first card flipped
+        hasFlippedCard = true;
+        firstCard = this;
+        return;
     }
     // This is the second card flipped
     hasFlippedCard = false;
     secondCard = this;
     // Check if the two cards match
     if (firstCard.dataset.card === secondCard.dataset.card) {
-      // The cards match, disable click events and increase score and count
-      disableCards();
-      attempts++;
-      document.getElementById("attempts").textContent = attempts;
-      count++;
-      checkEndGame();
-    } else {
-      // The cards don't match, flip them back
-      lockBoard = true;
-      setTimeout(() => {
-        firstCard.classList.remove("flipped");
-        firstCard.childNodes[1].classList.remove("flipped");
-        secondCard.classList.remove("flipped");
-        secondCard.childNodes[1].classList.remove("flipped");
-        lockBoard = false;
+        // The cards match, disable click events and increase score and count
+        disableCards();
         attempts++;
         document.getElementById("attempts").textContent = attempts;
-      }, 1000);
+        count++;
+        checkEndGame();
+    } else {
+        // The cards don't match, flip them back
+        lockBoard = true;
+        setTimeout(() => {
+            firstCard.classList.remove("flipped");
+            firstCard.childNodes[1].classList.remove("flipped");
+            secondCard.classList.remove("flipped");
+            secondCard.childNodes[1].classList.remove("flipped");
+            lockBoard = false;
+            attempts++;
+            document.getElementById("attempts").textContent = attempts;
+        }, 1000);
     }
-  }
+}
 
 // Disable click events on matched cards
 function disableCards() {
@@ -112,36 +135,36 @@ function disableCards() {
 }
 
 // Checks if the game has ended
-function checkEndGame(){
+function checkEndGame() {
     // Win and lose conditions
-    if(attempts>10){
+    if (attempts > 10) {
         // Alerts user to loss
         alert("You have lost due to too many attempts");
         window.location.href = "./pairs.php";
-    } else if(count===(cards.length/2)){
-        score = Math.round(((cards.length/2)/attempts)*100);
+    } else if (count === (cards.length / 2)) {
+        score = Math.round(((cards.length / 2) / attempts) * 100);
         document.getElementById("score").textContent = score;
         // Checks if user is in register session
         if (sessionStorage.getItem("insession")) {
             // Asks if they want theri score to be added to the leaderboard
-            if(confirm("Game Ended\n Would you like your score to go to the leader board?\n Press cancel to play again")){
+            if (confirm("Game Ended\n Would you like your score to go to the leader board?\n Press cancel to play again")) {
                 // Add to leader board
-                let user = createUser(getCookie("username"),getCookie("skin"),getCookie("eyes"),getCookie("mouth"), score);
+                let user = createUser(getCookie("username"), getCookie("skin"), getCookie("eyes"), getCookie("mouth"), score);
                 leaderboard.append(user);
                 window.location.href = "./leaderboard.php";
             }
-            else{
+            else {
                 resetGame();
             }
         }
         return true;
     }
-    else{
+    else {
         return false;
     }
 }
 
-function loadJSON(){
+function loadJSON() {
     console.log("[JSON] Empting local leaderboard");
     emptyLeaderboard()
     console.log("[JSON] Loading...");
@@ -151,58 +174,60 @@ function loadJSON(){
     xhr.responseType = 'json';
     // Send the request to retrieve the JSON data
     xhr.send();
-    
-    xhr.onload = function() {
+
+    xhr.onload = function () {
         // Check status code to see id it was succesfull
         if (xhr.status === 200) {
             leaderboard = JSON.parse(JSON.stringify(xhr.response)).scores;
-            console.log("[JSON] Leaderboard: "+leaderboard[0].username);
+            console.log("[JSON] Leaderboard: " + leaderboard[0].username);
         }
-    }; 
+    };
 }
 
-function emptyLeaderboard(){
-    leaderboard.forEach(user=>{
+function emptyLeaderboard() {
+    leaderboard.forEach(user => {
         leaderboard.pop(user);
     });
 }
 
-function saveJSON(){
+function saveJSON() {
     // Make a request to overwrite the file
     console.log("[JSON] Overwriting...");
-    
+
 }
 
-function genCards(){
-    console.log("gen");
-    for(let i = 0; i < 5; i++){
-        let skin=skin[Math.floor(Math.random() * 3)];
-        let eyes= eyes[Math.floor(Math.random() * 6)];
-        let mouth= mouth[Math.floor(Math.random() * 6)];
-        newCards.push(createCard(skin, eyes, mouth, i+1,))
-        console.log("[GENERATE CARD] Skin: "+skin);
-        console.log("[GENERATE CARD] Eyes: "+eyes);
-        console.log("[GENERATE CARD] Mouth: "+mouth);
-        console.log("[GENERATE CARD] Data: "+data);
+function genCards() {
+    var setupCards = [];
+    const skin = ["green.png", "red.png", "yellow.png"];
+    const eyes = ["closed.png", "laughing.png", "long.png", "normal.png", "rolling.png", "winking.png"];
+    const mouth = ["open.png", "sad.png", "smiling.png", "straight.png", "surprise.png", "teeth.png"];
+    for (let i = 0; i < 5; i++) {
+        const skinURL = "assets/emoji-assets/skin/" + skin[Math.floor(Math.random() *  skin.length)];
+        const eyesURL = "assets/emoji-assets/eyes/" + eyes[Math.floor(Math.random() * eyes.length)];
+        const mouthURL = "assets/emoji-assets/mouth/" + mouth[Math.floor(Math.random() * mouth.length)];
+        setupCards.push(createCard(skinURL, eyesURL, mouthURL, (i + 1)));
+        setupCards.push(createCard(skinURL, eyesURL, mouthURL, (i + 1)));
     };
+    return setupCards;
 }
 
-function createCard(skinURL, eyesURL, mouthURL, data){
+function createCard(skinURL, eyesURL, mouthURL, data) {
     const card = {
         "skin": skinURL,
         "eyes": eyesURL,
         "mouth": mouthURL,
         "data": data,
     }
+    return card;
 }
 
-function createUser(username, skinURL, eyesURL, mouthURL, score){
+function createUser(username, skinURL, eyesURL, mouthURL, score) {
     let user = {
         "username": username,
         "skin": skinURL,
         "eyes": eyesURL,
         "mouth": mouthURL,
-        "score":score,
+        "score": score,
     }
     return user;
 }
@@ -210,13 +235,13 @@ function createUser(username, skinURL, eyesURL, mouthURL, score){
 function getCookie(cname) {
     let name = cname + "=";
     let ca = document.cookie.split(';');
-    for(let i = 0; i < ca.length; i++) {
+    for (let i = 0; i < ca.length; i++) {
         let c = ca[i];
         while (c.charAt(0) === ' ') {
-        c = c.substring(1);
+            c = c.substring(1);
         }
         if (c.indexOf(name) === 0) {
-        return c.substring(name.length, c.length);
+            return c.substring(name.length, c.length);
         }
     }
     return null;
@@ -224,6 +249,5 @@ function getCookie(cname) {
 
 
 // Event Listeners
-resetBtn.addEventListener('click', resetGame);
+resetBtn.addEventListener('click', setupGame);
 startBtn.addEventListener('click', start);
-
