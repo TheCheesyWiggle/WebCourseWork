@@ -14,7 +14,7 @@
     }
 </style>
 <?php
-$page = "Home";
+$page = "home";
 include_once("header.php");
 ?>
 

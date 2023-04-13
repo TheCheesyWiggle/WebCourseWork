@@ -89,7 +89,7 @@
 </style>
 
 <?php
-    $page = "Pairs";
+    $page = "memory";
     include_once("header.php");
 ?>
     <body>

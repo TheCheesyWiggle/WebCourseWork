@@ -17,13 +17,14 @@ let hasFlippedCard = false;
 let lockBoard = false;
 // Arrays
 var leaderboard = [];
+var newCards=[];
 const skin = ["green.png","red.png","yellow.png"];
 const eyes =  ["closed.png","laughing.png","long.png","normal.png","rolling.png","winking.png"];
 const mouth = ["open.png","sad.png","smiling.png","straight.png","surprise.png","teeth.png"];
 
 function start(){
+    genCards();
     loadJSON();
-    console.log(leaderboard);
     hideBtn();
     resetGame();
 }
@@ -114,7 +115,7 @@ function disableCards() {
 function checkEndGame(){
     // Win and lose conditions
     if(attempts>10){
-        // Refreshes page
+        // Alerts user to loss
         alert("You have lost due to too many attempts");
         window.location.href = "./pairs.php";
     } else if(count===(cards.length/2)){
@@ -170,6 +171,29 @@ function saveJSON(){
     // Make a request to overwrite the file
     console.log("[JSON] Overwriting...");
     
+}
+
+function genCards(){
+    console.log("gen");
+    for(let i = 0; i < 5; i++){
+        let skin=skin[Math.floor(Math.random() * 3)];
+        let eyes= eyes[Math.floor(Math.random() * 6)];
+        let mouth= mouth[Math.floor(Math.random() * 6)];
+        newCards.push(createCard(skin, eyes, mouth, i+1,))
+        console.log("[GENERATE CARD] Skin: "+skin);
+        console.log("[GENERATE CARD] Eyes: "+eyes);
+        console.log("[GENERATE CARD] Mouth: "+mouth);
+        console.log("[GENERATE CARD] Data: "+data);
+    };
+}
+
+function createCard(skinURL, eyesURL, mouthURL, data){
+    const card = {
+        "skin": skinURL,
+        "eyes": eyesURL,
+        "mouth": mouthURL,
+        "data": data,
+    }
 }
 
 function createUser(username, skinURL, eyesURL, mouthURL, score){

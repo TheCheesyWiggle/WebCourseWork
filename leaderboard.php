@@ -44,7 +44,7 @@
 </style>
 
 <?php
-    $page = "Leaderboard";
+    $page = "leaderboard";
     include_once("header.php");
 ?>
     <body>
