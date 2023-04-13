@@ -1,0 +1,21 @@
+Add score to the leaderboard
+- Load JSON
+- Add to JSON
+- Sort list
+- Save JSON
+
+leaderboard.php
+- Load JSON
+- Populate leaderboard
+
+Medium
+- Randomly generate cards
+- Populate game board
+- Add time element to score
+
+Complex
+- Add level progression
+- Rolling total points
+- Points per level (array.append)
+- Time per level
+- Background goes gold if the highscore for a level is broken

@@ -15,16 +15,13 @@ let score = 0;
 let count = 0;
 let hasFlippedCard = false;
 let lockBoard = false;
+const skin = ["green.png","red.png","yellow.png"];
+const eyes =  ["closed.png","laughing.png","long.png","normal.png","rolling.png","winking.png"];
+const mouth = ["open.png","sad.png","smiling.png","straight.png","surprise.png","teeth.png"];
 
 function start(){
     hideBtn();
-    setupBoard();
-}
-
-//sets up the board
-function setupBoard(){
-    shuffle();
-    resetCards();
+    resetGame();
 }
 
 // Shuffle cards function
@@ -80,18 +77,13 @@ function flipCard() {
     // This is the second card flipped
     hasFlippedCard = false;
     secondCard = this;
-
-    console.log(firstCard.dataset.card === secondCard.dataset.card);
-    console.log(firstCard.dataset.card);
-    console.log(secondCard.dataset.card);
     // Check if the two cards match
     if (firstCard.dataset.card === secondCard.dataset.card) {
       // The cards match, disable click events and increase score and count
       disableCards();
-      score++;
+      attempts++;
+      document.getElementById("attempts").textContent = attempts;
       count++;
-      document.getElementById("score").textContent = score;
-      console.log("Game:"+checkEndGame())
       checkEndGame();
     } else {
       // The cards don't match, flip them back
@@ -108,7 +100,7 @@ function flipCard() {
     }
   }
 
-// Function to disable click events on matched cards
+// Disable click events on matched cards
 function disableCards() {
     firstCard.removeEventListener("click", flipCard);
     secondCard.removeEventListener("click", flipCard);
@@ -116,14 +108,48 @@ function disableCards() {
 
 // Checks if the game has ended
 function checkEndGame(){
-    if(count===(cards.length/2)){
-        alert("You Win");
+    // Win and lose conditions
+    if(attempts>10){
+        // Refreshes page
+        alert("You have lost due to too many attempts");
+        window.location.href = "./pairs.php";
+    } else if(count===(cards.length/2)){
+        score = Math.round(((cards.length/2)/attempts)*100);
+        document.getElementById("score").textContent = score;
+        // Checks if user is in register session
+        if (sessionStorage.getItem("insession")) {
+            // Asks if they want theri score to be added to the leaderboard
+            if(confirm("Game Ended\n Would you like your score to go to the leader board?\n Press cancel to play again")){
+                // Add to datastructure for leader board
+                window.location.href = "./leaderboard.php";
+            }
+            else{
+                resetGame();
+            }
+        }
         return true;
     }
     else{
         return false;
     }
 }
+
+function AddToJSON(data){
+    var data = JSON.parse(txt);
+
+}
+
+function getJSON(){
+    
+    fetch('./leaderboard.json')
+        .then((response) => response.json())
+        .then((json) => console.log(json));
+
+}
+function saveJSON(){
+
+}
+
 
 // Event Listeners
 resetBtn.addEventListener('click', resetGame);

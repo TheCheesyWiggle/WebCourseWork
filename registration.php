@@ -196,7 +196,7 @@ session_start();
                 setcookies(username, skinURL, eyeURL, mouthURL);
                 setsession(username);
 
-                window.location.href = "./index.php"
+                window.location.href = "./index.php";
             }
 
         }

@@ -19,6 +19,7 @@
         display: flex;
         flex-wrap: wrap;
         margin-top: 2rem;
+        margin-bottom: 2rem;
         justify-content: center;
     }
     .card {
