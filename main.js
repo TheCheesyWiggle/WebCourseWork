@@ -9,19 +9,21 @@ const scoreDisplay = document.getElementById('score');
 const gameBoard = document.getElementById('game-board');
 
 // Variables
-let leaderboard;
 let firstCard, secondCard;
 let attempts = 1;
 let score = 0;
 let count = 0;
 let hasFlippedCard = false;
 let lockBoard = false;
+// Arrays
+var leaderboard = [];
 const skin = ["green.png","red.png","yellow.png"];
 const eyes =  ["closed.png","laughing.png","long.png","normal.png","rolling.png","winking.png"];
 const mouth = ["open.png","sad.png","smiling.png","straight.png","surprise.png","teeth.png"];
 
 function start(){
-
+    loadJSON();
+    console.log(leaderboard);
     hideBtn();
     resetGame();
 }
@@ -122,7 +124,9 @@ function checkEndGame(){
         if (sessionStorage.getItem("insession")) {
             // Asks if they want theri score to be added to the leaderboard
             if(confirm("Game Ended\n Would you like your score to go to the leader board?\n Press cancel to play again")){
-                // Add to datastructure for leader board
+                // Add to leader board
+                let user = createUser(getCookie("username"),getCookie("skin"),getCookie("eyes"),getCookie("mouth"), score);
+                leaderboard.append(user);
                 window.location.href = "./leaderboard.php";
             }
             else{
@@ -136,12 +140,9 @@ function checkEndGame(){
     }
 }
 
-function AddToJSON(data){
-    var data = JSON.parse(txt);
-
-}
-
 function loadJSON(){
+    console.log("[JSON] Empting local leaderboard");
+    emptyLeaderboard()
     console.log("[JSON] Loading...");
     // Create a new XMLHttpRequest object
     const xhr = new XMLHttpRequest();
@@ -153,28 +154,48 @@ function loadJSON(){
     xhr.onload = function() {
         // Check status code to see id it was succesfull
         if (xhr.status === 200) {
-            leaderboard = xhr.response;
+            leaderboard = JSON.parse(JSON.stringify(xhr.response)).scores;
+            console.log("[JSON] Leaderboard: "+leaderboard[0].username);
         }
-    };
+    }; 
+}
+
+function emptyLeaderboard(){
+    leaderboard.forEach(user=>{
+        leaderboard.pop(user);
+    });
 }
 
 function saveJSON(){
-    // Make a PUT request to overwrite the file
+    // Make a request to overwrite the file
     console.log("[JSON] Overwriting...");
-    fetch('leaderboard.json', {
-        method: 'PUT',
-        headers: {
-        'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(leaderboard),
-    })
-    .then(response => {
-        console.log('Data Overwritten successfully!');
-    })
-    .catch(error => {
-        console.error('Error adding data:', error);
-    });
-    console.log("[JSON] Finished");
+    
+}
+
+function createUser(username, skinURL, eyesURL, mouthURL, score){
+    let user = {
+        "username": username,
+        "skin": skinURL,
+        "eyes": eyesURL,
+        "mouth": mouthURL,
+        "score":score,
+    }
+    return user;
+}
+
+function getCookie(cname) {
+    let name = cname + "=";
+    let ca = document.cookie.split(';');
+    for(let i = 0; i < ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) === ' ') {
+        c = c.substring(1);
+        }
+        if (c.indexOf(name) === 0) {
+        return c.substring(name.length, c.length);
+        }
+    }
+    return null;
 }
 
 

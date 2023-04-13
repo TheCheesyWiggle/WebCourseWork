@@ -49,62 +49,7 @@
             ?>
             <div class="leaderboard">
                 <h1>Leaderboard </h1>
-                <table>
-                <tr>
-                    <th>Avatar</th>
-                    <th>Username</th>
-                    <th>Score</th>
-                </tr>
-                <tr>
-                    <td>User1</td>
-                    <td>User1</td>
-                    <td>User1</td>
-                </tr>
-                <tr>
-                    <td>User2</td>
-                    <td>User2</td>
-                    <td>User2</td>
-                </tr>
-                <tr>
-                    <td>User3</td>
-                    <td>User3</td>
-                    <td>User3</td>
-                </tr>
-                <tr>
-                    <td>User4</td>
-                    <td>User4</td>
-                    <td>User4</td>
-                </tr>
-                <tr>
-                    <td>User5</td>
-                    <td>User5</td>
-                    <td>User5</td>
-                </tr>
-                <tr>
-                    <td>User6</td>
-                    <td>User6</td>
-                    <td>User6</td>
-                </tr>
-                <tr>
-                    <td>User7</td>
-                    <td>User7</td>
-                    <td>User7</td>
-                </tr>
-                <tr>
-                    <td>User8</td>
-                    <td>User8</td>
-                    <td>User8</td>
-                </tr>
-                <tr>
-                    <td>User9</td>
-                    <td>User9</td>
-                    <td>User9</td>
-                </tr>
-                <tr>
-                    <td>User10</td>
-                    <td>User10</td>
-                    <td>User10</td>
-                </tr>
+                <table id="table">
                 </table>
             </div>
         </div>
@@ -112,13 +57,93 @@
 </html>
 
 <script>
+    var leaderboard =[];
+
     // Adds scores to the leader board
-    function poplateLeaderboard(){
+    function displayLeaderboard(){
+        html="<tr>"
+                +"<th>Avatar</th>"
+                +"<th>Username</th>"
+                +"<th>Score</th>"
+            +"</tr>";
+        console.log(leaderboard.length);
+        leaderboard.forEach(user => {
+            console.log("[HTML] Creating user html")
+            html +="<tr>"
+                +"<td><div id = 'emoji_nav'>"
+                    +"<img id='skin_nav' src='"+user.skin+"'>"
+                    +"<img id='eyes_nav' src='"+user.eyes+"'>"
+                    +"<img id='mouth_nav' src='"+user.mouth+"'>"
+                    +"</div></td>"
+                +"<td>"+user.username+"</td>"
+                +"<td>"+user.score+"</td>"
+            +"</tr>"
+        });
 
+        document.getElementById("table").innerHTML= html;
     }
 
-    function convertJSON(){
+function loadJSON(){
+    console.log("[JSON] Empting local leaderboard");
+    emptyLeaderboard()
+    console.log("[JSON] Loading...");
+    // Create a new XMLHttpRequest object
+    const xhr = new XMLHttpRequest();
+    xhr.open('GET', 'leaderboard.json');
+    xhr.responseType = 'json';
+    // Send the request to retrieve the JSON data
+    xhr.send();
+    
+    xhr.onload = function() {
+        // Check status code to see id it was succesfull
+        if (xhr.status === 200) {
+            let XMLresponse = JSON.parse(JSON.stringify(xhr.response)).scores;
+            console.log("[XML] XMLResponse: "+XMLresponse );
+            // Populate leaderboard in here because otherwise it executes before the XML data has loaded
+            populateLeaderboard(XMLresponse);
+            sortLeaderboard();
+            displayLeaderboard();
+        }
+    }; 
+}
 
+function createUser(username, skinURL, eyesURL, mouthURL, score){
+    console.log("[JS] Creating user...");
+    let user = {
+        "username": username,
+        "skin": skinURL,
+        "eyes": eyesURL,
+        "mouth": mouthURL,
+        "score":score,
     }
+    return user;
+}
+
+function emptyLeaderboard(){
+    leaderboard.forEach(user=>{
+        leaderboard.pop(user);
+    });
+}
+
+function populateLeaderboard(XMLresponse){
+    if (XMLresponse !== undefined && XMLresponse !== null) {
+            XMLresponse.forEach(element =>{
+            leaderboard.push(createUser(element.username, element.skin, element.eyes, element.mouth, element.score))
+        });
+    }
+    else{
+        console.log("[POPULATE] ERROR");
+    }
+    console.log("[LEADERBOARD] Leaderboard: "+leaderboard)
+    
+}
+
+function sortLeaderboard(){
+    leaderboard.sort((a, b) => {
+        return b.score - a.score;
+    });
+}
+
+loadJSON();
 
 </script>

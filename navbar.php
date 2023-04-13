@@ -74,7 +74,7 @@
 
     document.getElementById("dynamic").innerHTML = content;
     document.getElementById("avatar").innerHTML = emoji;
-
+    // should be able to get rid of this function as its in main.js
     function getCookie(cname) {
         let name = cname + "=";
         let ca = document.cookie.split(';');

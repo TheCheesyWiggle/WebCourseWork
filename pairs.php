@@ -99,7 +99,7 @@
             ?>
             <div class="container">
                 <h1>Memory Game</h1>
-                <button id="start-btn" onclick="start()">Start the game</button>
+                <button id="start-btn">Start the game</button>
                 <p>Attempts: <span id="attempts">1</span></p>
                 <p>Score: <span id="score">0</span></p>
                 <div id="game-board">
