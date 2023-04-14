@@ -13,12 +13,13 @@ let score = 0;
 let count = 0;
 let hasFlippedCard = false;
 let lockBoard = false;
+let startTime;
+let timerInterval;
 // Arrays
 var leaderboard = [];
 
 function start() {
-    cards = document.querySelectorAll('.card');
-    console.log(cards);
+    startTimer();
     genCards();
     loadJSON();
     hideBtn();
@@ -89,7 +90,6 @@ function hideBtn() {
 }
 
 function flipCard() {
-    console.log("FLIP")
     // Lock the board if there are two cards flipped
     if (lockBoard) { return };
     // Don't allow the same card to be flipped twice
@@ -137,13 +137,16 @@ function disableCards() {
 
 // Checks if the game has ended
 function checkEndGame() {
+    console.log("[GAME} count");
     // Win and lose conditions
-    if (attempts > 10) {
+    if (attempts > 20) {
         // Alerts user to loss
         alert("You have lost due to too many attempts");
         window.location.href = "./pairs.php";
     } else if (count === (cards.length / 2)) {
-        score = Math.round(((cards.length / 2) / attempts) * 100);
+        const elapsedTime = stopTimer();
+        score = Math.round((attempts*100)+ elapsedTime);
+        console.log("Score: "+score);
         document.getElementById("score").textContent = score;
         // Checks if user is in register session
         if (sessionStorage.getItem("insession")) {
@@ -155,10 +158,12 @@ function checkEndGame() {
                 window.location.href = "./leaderboard.php";
             }
             else {
-                resetGame();
+                alert("Page will reset");
+                window.location.href = "./pairs.php";
             }
         }
-        return true;
+        alert("Not using registered session so the page will reset");
+        window.location.href = "./pairs.php";;
     }
     else {
         return false;
@@ -203,9 +208,12 @@ function genCards() {
     const eyes = ["closed.png", "laughing.png", "long.png", "normal.png", "rolling.png", "winking.png"];
     const mouth = ["open.png", "sad.png", "smiling.png", "straight.png", "surprise.png", "teeth.png"];
     for (let i = 0; i < 5; i++) {
-        const skinURL = "assets/emoji-assets/skin/" + skin[Math.floor(Math.random() *  skin.length)];
-        const eyesURL = "assets/emoji-assets/eyes/" + eyes[Math.floor(Math.random() * eyes.length)];
-        const mouthURL = "assets/emoji-assets/mouth/" + mouth[Math.floor(Math.random() * mouth.length)];
+        const skinRand = Math.floor(Math.random() *  skin.length);
+        const eyesRand = Math.floor(Math.random() *  eyes.length);
+        const mouthRand = Math.floor(Math.random() *  mouth.length);
+        const skinURL = "assets/emoji-assets/skin/" + skin[skinRand];
+        const eyesURL = "assets/emoji-assets/eyes/" + eyes[eyesRand];
+        const mouthURL = "assets/emoji-assets/mouth/" + mouth[mouthRand];
         setupCards.push(createCard(skinURL, eyesURL, mouthURL, (i + 1)));
         setupCards.push(createCard(skinURL, eyesURL, mouthURL, (i + 1)));
     };
@@ -246,6 +254,26 @@ function getCookie(cname) {
         }
     }
     return null;
+}
+
+function startTimer(){
+    // set the start time to the current time
+  startTime = new Date().getTime();
+
+  // start the timer and execute the callback function every second
+  timerInterval = setInterval(() => {
+    const currentTime = new Date().getTime();
+    const elapsedTime = currentTime - startTime;
+  }, 1000);
+}
+
+function stopTimer(){
+    // stop the timer
+  clearInterval(timerInterval);
+
+  // get the final elapsed time and display it in the UI
+  const currentTime = new Date().getTime();
+  return currentTime - startTime;
 }
 
 

@@ -145,7 +145,7 @@ function populateLeaderboard(XMLresponse){
 
 function sortLeaderboard(){
     leaderboard.sort((a, b) => {
-        return b.score - a.score;
+        return a.score - b.score;
     });
 }
 

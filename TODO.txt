@@ -1,10 +1,6 @@
-Add score to the leaderboard
-- Add to JSON
-- Save JSON
-
-Medium
-- Add time element to score
-- check for repeats
+TODO
+- Add to JSON (or switch to csv)
+- Test regex
 
 Complex
 - Add level progression
