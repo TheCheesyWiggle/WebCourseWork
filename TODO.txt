@@ -1,11 +1,12 @@
 TODO
 - Add to JSON (or switch to csv)
 - Test regex
+- dont allow duplicate cards
 
 Complex
 - Add level progression
 - Rolling total points
-- Points per level (array.append)
+- Points per level (array.push)
 - Time per level
 - Background goes gold if the highscore for a level is broken
 - Create an array of emojis that will be used as card images.

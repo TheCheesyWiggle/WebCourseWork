@@ -5,6 +5,7 @@ const resetBtn = document.getElementById('reset-btn');
 const attemptsDisplay = document.getElementById('attempts');
 const scoreDisplay = document.getElementById('score');
 const gameBoard = document.getElementById('game-board');
+const file = "leaderboard.csv";
 
 // Variables
 let firstCard, secondCard;
@@ -21,7 +22,7 @@ var leaderboard = [];
 function start() {
     startTimer();
     genCards();
-    loadJSON();
+    readCSVFile();
     hideBtn();
     setupGame();
 }
@@ -47,7 +48,6 @@ function setupGame() {
 }
 
 function createBoard(setupCards) {
-    console.log(setupCards);
     let html = "";
     for (let i = 0; i < 10; i++) {
         html += "" 
@@ -74,7 +74,6 @@ function createBoard(setupCards) {
 function resetCards() {
     cards.forEach(card => {
         card.classList.remove("flipped");
-        console.log(card.childNodes);
         card.childNodes[0].classList.remove("flipped");
         card.addEventListener("click", flipCard);
     });
@@ -137,7 +136,6 @@ function disableCards() {
 
 // Checks if the game has ended
 function checkEndGame() {
-    console.log("[GAME} count");
     // Win and lose conditions
     if (attempts > 20) {
         // Alerts user to loss
@@ -146,60 +144,107 @@ function checkEndGame() {
     } else if (count === (cards.length / 2)) {
         const elapsedTime = stopTimer();
         score = Math.round((attempts*100)+ elapsedTime);
-        console.log("Score: "+score);
         document.getElementById("score").textContent = score;
         // Checks if user is in register session
         if (sessionStorage.getItem("insession")) {
             // Asks if they want theri score to be added to the leaderboard
             if (confirm("Game Ended\n Would you like your score to go to the leader board?\n Press cancel to play again")) {
+                console.log("[CSV] Adding to leaderboard...");
                 // Add to leader board
                 let user = createUser(getCookie("username"), getCookie("skin"), getCookie("eyes"), getCookie("mouth"), score);
-                leaderboard.append(user);
+                leaderboard.push(user);
+                //update csv file
+                overwriteCSVFile();
+                console.log("[CSV] Finished adding to leaderboard...");
+                alert("HELLO");
                 window.location.href = "./leaderboard.php";
             }
             else {
                 alert("Page will reset");
                 window.location.href = "./pairs.php";
+                console.log("[RESET]");
             }
         }
         alert("Not using registered session so the page will reset");
-        window.location.href = "./pairs.php";;
+        window.location.href = "./pairs.php";
     }
     else {
         return false;
     }
 }
 
-function loadJSON() {
-    console.log("[JSON] Empting local leaderboard");
-    emptyLeaderboard()
-    console.log("[JSON] Loading...");
-    // Create a new XMLHttpRequest object
-    const xhr = new XMLHttpRequest();
-    xhr.open('GET', 'leaderboard.json');
-    xhr.responseType = 'json';
-    // Send the request to retrieve the JSON data
-    xhr.send();
-
-    xhr.onload = function () {
-        // Check status code to see id it was succesfull
-        if (xhr.status === 200) {
-            leaderboard = JSON.parse(JSON.stringify(xhr.response)).scores;
-            console.log("[JSON] Leaderboard: " + leaderboard[0].username);
-        }
-    };
-}
-
-function emptyLeaderboard() {
-    leaderboard.forEach(user => {
+function emptyLeaderboard(){
+    leaderboard.forEach(user=>{
         leaderboard.pop(user);
     });
 }
 
-function saveJSON() {
-    // Make a request to overwrite the file
-    console.log("[JSON] Overwriting...");
 
+function parseCSV(csv) {
+    emptyLeaderboard()
+    const lines = csv.split('\n');
+    const headers = lines[0].split(',');
+
+    for (let i = 1; i < lines.length; i++) {
+        const currentLine = lines[i].split(',');
+        const newUser = createUser(currentLine[0],currentLine[1],currentLine[2],currentLine[3],currentLine[4]);
+
+        leaderboard.push(newUser);
+    }
+    console.log("[CSV] Leaderboard: ", leaderboard);
+}
+
+function readCSVFile() {
+    const xhr = new XMLHttpRequest();
+
+    xhr.open('GET', file);
+    xhr.responseType = 'text';
+
+    xhr.onload = function() {
+        const csvData = xhr.response;
+        const parsedData = parseCSV(csvData);
+        return parsedData;
+    };
+
+    xhr.send();
+}
+function stringifyCSV() {
+    const header = "username,skin,eyes,mouth,score";
+    let rows = "";
+    leaderboard.forEach(user =>{
+        rows += user.username+","+user.skin+","+user.eyes+","+user.mouth+","+user.score+"\n";
+    });
+    return `${header}\n${rows}`;
+  }
+
+function downloadFile(text) {
+    const element = document.createElement('a');
+    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+    element.setAttribute('download', file);
+
+    element.style.display = 'none';
+    document.body.appendChild(element);
+
+    element.click();
+
+    document.body.removeChild(element);
+}
+function overwriteCSVFile() {
+    // Read the existing CSV file
+    const xhr = new XMLHttpRequest();
+    xhr.open('GET', file);
+    xhr.responseType = 'text';
+    xhr.onload = function() {
+        // Convert the leaderboards to csv string
+        const csvString = stringifyCSV();
+
+        // Overwrite the existing CSV file with the updated data
+        const blob = new Blob([csvString], { type: 'text/csv' });
+        const url = URL.createObjectURL(blob);
+
+        downloadFile(csvString);
+    };
+    xhr.send();
 }
 
 function genCards() {
