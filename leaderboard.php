@@ -62,7 +62,7 @@
 </html>
 
 <script>
-    var leaderboard = [];
+    const leaderboard = [];
 
     // Adds scores to the leader board
     function displayLeaderboard(){
@@ -88,28 +88,35 @@
         document.getElementById("table").innerHTML= html;
     }
 
-function loadJSON(){
-    console.log("[JSON] Empting local leaderboard");
+function parseCSV(csv) {
     emptyLeaderboard()
-    console.log("[JSON] Loading...");
-    // Create a new XMLHttpRequest object
+    const lines = csv.split('\n');
+    const headers = lines[0].split(',');
+
+    for (let i = 1; i < lines.length; i++) {
+        const currentLine = lines[i].split(',');
+        const newUser = createUser(currentLine[0],currentLine[1],currentLine[2],currentLine[3],currentLine[4]);
+
+        leaderboard.push(newUser);
+    }
+    sortLeaderboard();
+    displayLeaderboard();
+}
+
+function readCSVFile() {
+    file = "leaderboard.csv";
     const xhr = new XMLHttpRequest();
-    xhr.open('GET', 'leaderboard.json');
-    xhr.responseType = 'json';
-    // Send the request to retrieve the JSON data
-    xhr.send();
-    
+
+    xhr.open('GET', file);
+    xhr.responseType = 'text';
+
     xhr.onload = function() {
-        // Check status code to see id it was succesfull
-        if (xhr.status === 200) {
-            let XMLresponse = JSON.parse(JSON.stringify(xhr.response)).scores;
-            console.log("[XML] XMLResponse: "+XMLresponse );
-            // Populate leaderboard in here because otherwise it executes before the XML data has loaded
-            populateLeaderboard(XMLresponse);
-            sortLeaderboard();
-            displayLeaderboard();
-        }
-    }; 
+        const csvData = xhr.response;
+        const parsedData = parseCSV(csvData);
+        return parsedData;
+    };
+
+    xhr.send();
 }
 
 function createUser(username, skinURL, eyesURL, mouthURL, score){
@@ -149,6 +156,6 @@ function sortLeaderboard(){
     });
 }
 
-loadJSON();
+readCSVFile();
 
 </script>
