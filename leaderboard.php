@@ -67,14 +67,18 @@
     // Adds scores to the leader board
     function displayLeaderboard(){
         html="<tr>"
+            +"<th>Level</th>"
                 +"<th>Avatar</th>"
                 +"<th>Username</th>"
                 +"<th>Score</th>"
             +"</tr>";
         console.log(leaderboard.length);
+        let count = 0
         leaderboard.forEach(user => {
+            count++;
             console.log("[HTML] Creating user html")
             html +="<tr>"
+                +"<td>"+count+"</td>"
                 +"<td><div id = 'emoji_nav'>"
                     +"<img id='skin_nav' src='"+user.skin+"'>"
                     +"<img id='eyes_nav' src='"+user.eyes+"'>"
@@ -99,7 +103,7 @@ function parseCSV(csv) {
 
         leaderboard.push(newUser);
     }
-    sortLeaderboard();
+    //sortLeaderboard();
     displayLeaderboard();
 }
 
@@ -150,11 +154,11 @@ function populateLeaderboard(XMLresponse){
     
 }
 
-function sortLeaderboard(){
-    leaderboard.sort((a, b) => {
-        return a.score - b.score;
-    });
-}
+//function sortLeaderboard(){
+//    leaderboard.sort((a, b) => {
+//        return a.score - b.score;
+//    });
+//}
 
 readCSVFile();
 

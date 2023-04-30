@@ -9,4 +9,5 @@ session_start();
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
         <title><?php echo $page?></title>
         <link rel="stylesheet" href="global.css" type="text/css">
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     </head>

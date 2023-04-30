@@ -4,6 +4,8 @@ const startBtn = document.getElementById('start-btn');
 const resetBtn = document.getElementById('reset-btn');
 const attemptsDisplay = document.getElementById('attempts');
 const scoreDisplay = document.getElementById('score');
+const lookingDisplay = document.getElementById('looking');
+const currentLevelDisplay = document.getElementById('level');
 const gameBoard = document.getElementById('game-board');
 const file = "leaderboard.csv";
 
@@ -16,10 +18,33 @@ let hasFlippedCard = false;
 let lockBoard = false;
 let startTime;
 let timerInterval;
+let currentLevel;
 // Arrays
 var leaderboard = [];
+var flippedCards = [];
+var scores=[];
+// Dictionaries
+const levels = [
+    {level:1, looking:"Pairs", noCards:2},
+    {level:2, looking:"Triplets", noCards:3},
+    {level:3, looking:"Quadruplets", noCards:4},
+    {level:4, looking:"Pairs", noCards:4},
+    {level:5, looking:"Triplets", noCards:6},
+    {level:6, looking:"Pairs", noCards:6},
+    {level:7, looking:"Pairs", noCards:8},
+    {level:8, looking:"Quadruplets", noCards:8},
+    {level:9, looking:"Triplets", noCards:9},
+    {level:10, looking:"Pairs", noCards:10},
+    {level:11, looking:"Triplets", noCards:12},
+    {level:12, looking:"Quadruplets", noCards:12},
+    {level:13, looking:"Triplets", noCards:15},
+    {level:14, looking:"Quadruplets", noCards:16},
+    {level:15, looking:"Quadruplets", noCards:24}
+]
 
 function start() {
+    //sets current level to 0
+    currentLevel = 0;
     startTimer();
     genCards();
     readCSVFile();
@@ -42,6 +67,9 @@ function setupGame() {
     count = 0;
     attemptsDisplay.textContent = attempts;
     scoreDisplay.textContent = score;
+    console.log("[SETUP] Current Level: "+levels[currentLevel].level)
+    currentLevelDisplay.textContent = levels[currentLevel].level.toString();
+    lookingDisplay.textContent = levels[currentLevel].looking;
     createBoard(genCards());
     shuffle();
     resetCards();
@@ -49,7 +77,7 @@ function setupGame() {
 
 function createBoard(setupCards) {
     let html = "";
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < setupCards.length; i++) {
         html += "" 
                 +"<div class='card' data-card='" + setupCards[i].data + "'>"
                     + "<div class='card-inner'>"
@@ -89,70 +117,133 @@ function hideBtn() {
 }
 
 function flipCard() {
-    // Lock the board if there are two cards flipped
-    if (lockBoard) { return };
+    // Lock the board if there are already 4 cards flipped
+    if (flippedCards.length >= 4) { return };
     // Don't allow the same card to be flipped twice
-    if (this === firstCard) { return };
+    if (flippedCards.includes(this)) { return };
     // Add flipped class to show the card face
     this.classList.add("flipped");
     this.childNodes[0].classList.add("flipped");
-    if (!hasFlippedCard) {
-        // This is the first card flipped
-        hasFlippedCard = true;
-        firstCard = this;
-        return;
+    console.log("[Flip]"+this);
+    flippedCards.push(this);
+    // Check if all cards have been flipped
+    if (flippedCards.length === howManyToMatch()) {
+        checkMatch();
     }
-    // This is the second card flipped
-    hasFlippedCard = false;
-    secondCard = this;
-    // Check if the two cards match
-    if (firstCard.dataset.card === secondCard.dataset.card) {
-        // The cards match, disable click events and increase score and count
-        disableCards();
-        attempts++;
-        document.getElementById("attempts").textContent = attempts;
-        count++;
-        checkEndGame();
+}
+
+function howManyToMatch(){
+    switch(levels[currentLevel].looking) {
+        case "Pairs":
+            return 2;
+        case "Triplets":
+            return 3;
+        case "Quadruplets":
+            return 4;
+        default:
+            alert("ERROR: Please revist page an error occurred")
+      } 
+}
+
+function checkMatch() {
+    if(calcScore>leaderboard[currentLevel].score){
+        document.getElementById("container").style.backgroundColor = "#FFD700";
+    }
+    let matched = true;
+    for (let i = 0; i < flippedCards.length - 1; i++) {
+        console.log("[CHECK MATCH] card 1: "+flippedCards[i].dataset.card);
+        console.log("[CHECK MATCH] card 2: "+flippedCards[i+1].dataset.card);
+        if (flippedCards[i].dataset.card !== flippedCards[i+1].dataset.card) {
+            matched = false;
+            console.log("[CHECK MATCH] False");
+            break;
+        }
+    }
+    console.log("[CHECK MATCH] "+ matched);
+    // Disable click events and update score and count
+    disableCards();
+    attempts++;
+    document.getElementById("attempts").textContent = attempts;
+    if (matched) {
+        // All cards match
+        let currentTime = new Date().getTime();
+        const elapsedTime = currentTime - startTime;
+        calcScore(elapsedTime);
+        count+=flippedCards.length;
+        flippedCards = [];
+        checkEndLevel();
     } else {
-        // The cards don't match, flip them back
-        lockBoard = true;
+        // Cards don't match, flip them back
         setTimeout(() => {
-            firstCard.classList.remove("flipped");
-            firstCard.childNodes[0].classList.remove("flipped");
-            secondCard.classList.remove("flipped");
-            secondCard.childNodes[0].classList.remove("flipped");
-            lockBoard = false;
+            for (let card of flippedCards) {
+                card.classList.remove("flipped");
+                card.childNodes[0].classList.remove("flipped");
+            }
+            flippedCards = [];
+            enableCards();
             attempts++;
             document.getElementById("attempts").textContent = attempts;
         }, 1000);
     }
 }
 
-// Disable click events on matched cards
 function disableCards() {
-    firstCard.removeEventListener("click", flipCard);
-    secondCard.removeEventListener("click", flipCard);
+    for (let card of flippedCards) {
+        card.removeEventListener("click", flipCard);
+    }
+}
+
+function enableCards() {
+    for (let card of document.querySelectorAll(".card:not(.flipped)")) {
+        card.addEventListener("click", flipCard);
+    }
 }
 
 // Checks if the game has ended
-function checkEndGame() {
+function checkEndLevel() {
     // Win and lose conditions
     if (attempts > 20) {
-        // Alerts user to loss
+        // Alerts player to loss
         alert("You have lost due to too many attempts");
+        // Redirects the player
         window.location.href = "./pairs.php";
-    } else if (count === (cards.length / 2)) {
+    } else if (count === levels[currentLevel].noCards) {
         const elapsedTime = stopTimer();
-        score = Math.round((attempts*100)+ elapsedTime);
+        calcScore(elapsedTime)
         document.getElementById("score").textContent = score;
-        // Checks if user is in register session
-        if (sessionStorage.getItem("insession")) {
+        scores.push(score);
+        count = 0;
+        currentLevel++;
+        setupGame();
+    }
+}
+
+function calcScore(elapsedTime){
+    score = currentLevel*1000+Math.round((attempts*-100)- elapsedTime);
+    if(score<=0){
+        score = 0;
+    }
+}
+
+function checkHighscore(){
+    if(score>leaderboard[currentLevel].score){
+        return true;
+    }
+    false;
+}
+
+function updateLeaderboard(){
+    // Checks if user is in register session
+    if (sessionStorage.getItem("insession")) {
+        if(checkHighscore()===true){
             // Asks if they want theri score to be added to the leaderboard
-            if (confirm("Game Ended\n Would you like your score to go to the leader board?\n Press cancel to play again")) {
+            if (confirm("Game Ended\n You got a highscore would you like your score to go to the leader board?\n Press cancel to play again")) {
                 console.log("[CSV] Adding to leaderboard...");
                 // Add to leader board
+                console.log("[CSV] leaderboard: "+leaderboard[currentLevel].username);
                 let user = createUser(getCookie("username"), getCookie("skin"), getCookie("eyes"), getCookie("mouth"), score);
-                leaderboard.push(user);
+                leaderboard[currentLevel]=user;
+                console.log("[CSV] leaderboard: "+leaderboard[currentLevel].username);
                 //update csv file
                 overwriteCSVFile();
                 console.log("[CSV] Finished adding to leaderboard...");
@@ -165,11 +256,14 @@ function checkEndGame() {
                 console.log("[RESET]");
             }
         }
-        alert("Not using registered session so the page will reset");
-        window.location.href = "./pairs.php";
     }
-    else {
-        return false;
+    alert("Not using registered session so the page will reset");
+    window.location.href = "./pairs.php";
+}
+
+function checkEndGame(){
+    if(currentLevel===15){
+        updateLeaderboard();
     }
 }
 
@@ -217,34 +311,21 @@ function stringifyCSV() {
     return `${header}\n${rows}`;
   }
 
-function downloadFile(text) {
-    const element = document.createElement('a');
-    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
-    element.setAttribute('download', file);
 
-    element.style.display = 'none';
-    document.body.appendChild(element);
-
-    element.click();
-
-    document.body.removeChild(element);
-}
 function overwriteCSVFile() {
-    // Read the existing CSV file
-    const xhr = new XMLHttpRequest();
-    xhr.open('GET', file);
-    xhr.responseType = 'text';
-    xhr.onload = function() {
-        // Convert the leaderboards to csv string
-        const csvString = stringifyCSV();
-
-        // Overwrite the existing CSV file with the updated data
-        const blob = new Blob([csvString], { type: 'text/csv' });
-        const url = URL.createObjectURL(blob);
-
-        downloadFile(csvString);
-    };
-    xhr.send();
+    var csvData = stringifyCSV();
+    // Make an AJAX request to a PHP file
+    $.ajax({
+        url: 'updateLeaderboard.php', // Path to your PHP file
+        type: 'POST',
+        data: { csvData: csvData }, // Pass the CSV data to PHP
+        success: function(response) {
+            console.log(response);
+        },
+        error: function(xhr, status, error) {
+        console.error('AJAX Error:', error);
+        }
+    });
 }
 
 function genCards() {
@@ -252,13 +333,62 @@ function genCards() {
     const skin = ["green.png", "red.png", "yellow.png"];
     const eyes = ["closed.png", "laughing.png", "long.png", "normal.png", "rolling.png", "winking.png"];
     const mouth = ["open.png", "sad.png", "smiling.png", "straight.png", "surprise.png", "teeth.png"];
-    for (let i = 0; i < 5; i++) {
+    switch(levels[currentLevel].looking) {
+        case "Pairs":
+            setupCards =addPairs(setupCards,skin,eyes,mouth)
+            break;
+        case "Triplets":
+            setupCards = addTriplets(setupCards,skin,eyes,mouth);
+            break;
+        case "Quadruplets":
+            setupCards = addQuadruplets(setupCards,skin,eyes,mouth);
+            break;
+        default:
+            alert("ERROR: Please revist page an error occurred")
+      } 
+    
+    return setupCards;
+}
+
+//TODO: Clean up add fucntions (neater way to do it)
+
+function addPairs(setupCards,skin,eyes,mouth){
+    for (let i = 0; i < levels[currentLevel].noCards/2; i++) {
         const skinRand = Math.floor(Math.random() *  skin.length);
         const eyesRand = Math.floor(Math.random() *  eyes.length);
         const mouthRand = Math.floor(Math.random() *  mouth.length);
         const skinURL = "assets/emoji-assets/skin/" + skin[skinRand];
         const eyesURL = "assets/emoji-assets/eyes/" + eyes[eyesRand];
         const mouthURL = "assets/emoji-assets/mouth/" + mouth[mouthRand];
+        setupCards.push(createCard(skinURL, eyesURL, mouthURL, (i + 1)));
+        setupCards.push(createCard(skinURL, eyesURL, mouthURL, (i + 1)));
+    };
+    return setupCards;
+}
+function addTriplets(setupCards,skin,eyes,mouth){
+    for (let i = 0; i < levels[currentLevel].noCards/3; i++) {
+        const skinRand = Math.floor(Math.random() *  skin.length);
+        const eyesRand = Math.floor(Math.random() *  eyes.length);
+        const mouthRand = Math.floor(Math.random() *  mouth.length);
+        const skinURL = "assets/emoji-assets/skin/" + skin[skinRand];
+        const eyesURL = "assets/emoji-assets/eyes/" + eyes[eyesRand];
+        const mouthURL = "assets/emoji-assets/mouth/" + mouth[mouthRand];
+        setupCards.push(createCard(skinURL, eyesURL, mouthURL, (i + 1)));
+        setupCards.push(createCard(skinURL, eyesURL, mouthURL, (i + 1)));
+        setupCards.push(createCard(skinURL, eyesURL, mouthURL, (i + 1)));
+    };
+    return setupCards;
+}
+function addQuadruplets(setupCards,skin,eyes,mouth){
+    for (let i = 0; i < levels[currentLevel].noCards/4; i++) {
+        const skinRand = Math.floor(Math.random() *  skin.length);
+        const eyesRand = Math.floor(Math.random() *  eyes.length);
+        const mouthRand = Math.floor(Math.random() *  mouth.length);
+        const skinURL = "assets/emoji-assets/skin/" + skin[skinRand];
+        const eyesURL = "assets/emoji-assets/eyes/" + eyes[eyesRand];
+        const mouthURL = "assets/emoji-assets/mouth/" + mouth[mouthRand];
+        setupCards.push(createCard(skinURL, eyesURL, mouthURL, (i + 1)));
+        setupCards.push(createCard(skinURL, eyesURL, mouthURL, (i + 1)));
         setupCards.push(createCard(skinURL, eyesURL, mouthURL, (i + 1)));
         setupCards.push(createCard(skinURL, eyesURL, mouthURL, (i + 1)));
     };
@@ -308,7 +438,6 @@ function startTimer(){
   // start the timer and execute the callback function every second
   timerInterval = setInterval(() => {
     const currentTime = new Date().getTime();
-    const elapsedTime = currentTime - startTime;
   }, 1000);
 }
 
@@ -323,5 +452,5 @@ function stopTimer(){
 
 
 // Event Listeners
-resetBtn.addEventListener('click', setupGame);
+resetBtn.addEventListener('click', start);
 startBtn.addEventListener('click', start);
