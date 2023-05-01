@@ -48,6 +48,7 @@ const levels = [
 function start() {
     //sets current level to 0
     currentLevel = 0;
+    totalScoreDisplay.textContent = 0;
     genCards();
     readCSVFile();
     hideBtn();
@@ -264,12 +265,7 @@ function updateLeaderboard(){
                 console.log("[RESET]");
             }
         }
-    }
-    else{
-        alert("Not using registered session so the page will reset");
-        window.location.href = "./pairs.php";
-    }
-   
+    } 
 }
 
 function checkEndGame(){
@@ -321,7 +317,9 @@ function stringifyCSV() {
     const header = "username,skin,eyes,mouth,score";
     let rows = "";
     leaderboard.forEach(user =>{
-        rows += user.username+","+user.skin+","+user.eyes+","+user.mouth+","+user.score+"\n";
+        if(!user.username===null){
+            rows += user.username+","+user.skin+","+user.eyes+","+user.mouth+","+user.score+"\n";
+        }
     });
     return `${header}\n${rows}`;
   }

@@ -7,3 +7,10 @@ TODO
 
 COMMAND
 scp -r C:\Users\Finn\xampp\htdocs\WebCourseWork remote_username@10.10.0.2:/remote/directory
+
+
+
+
+
+
+scp -r yourLocalDirectory remote_username@10.10.0.2:/remote/directory
