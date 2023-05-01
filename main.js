@@ -215,7 +215,7 @@ function checkEndLevel() {
 }
 
 function calcScore(){
-    if(!(currentLevel===undefined)){
+    if(currentLevel>0){
         const elapsedTime =  getElapsedTime()/1000;
         console.log("[SCORE] Elapsed Time:"+getElapsedTime());
         score = Math.round(((1/attempts)*100)+((Math.pow(Math.E,-0.15*elapsedTime)*100)));
@@ -297,16 +297,17 @@ function parseCSV(csv) {
 }
 
 function readCSVFile() {
+    var timestamp = new Date().getTime(); // Generate a unique timestamp
+
+    // Append the timestamp as a query parameter to the CSV URL
+    var updatedCsvUrl = file + '?t=' + timestamp;
     const xhr = new XMLHttpRequest();
 
-    xhr.open('GET', file, true);
-    xhr.responseType =  'arraybuffer';
+    xhr.open('GET', updatedCsvUrl);
+    xhr.responseType = 'text';
 
     xhr.onload = function() {
-        var arrayBuffer = xhr.response;
-        var decoder = new TextDecoder('utf-8');
-        const csvData = decoder.decode(arrayBuffer);;
-        console.log("[CSVDATA]",typeof csvData)
+        const csvData = xhr.response;
         const parsedData = parseCSV(csvData);
         return parsedData;
     };
@@ -317,9 +318,7 @@ function stringifyCSV() {
     const header = "username,skin,eyes,mouth,score";
     let rows = "";
     leaderboard.forEach(user =>{
-        if(!user.username===null){
-            rows += user.username+","+user.skin+","+user.eyes+","+user.mouth+","+user.score+"\n";
-        }
+        rows += user.username+","+user.skin+","+user.eyes+","+user.mouth+","+user.score+"\n";
     });
     return `${header}\n${rows}`;
   }

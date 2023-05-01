@@ -71,6 +71,7 @@
         console.log(leaderboard.length);
         let count = 0
         leaderboard.forEach(user => {
+            
             count++;
             console.log("[HTML] Creating user html")
             html +="<tr>"

@@ -1,8 +1,8 @@
 username,skin,eyes,mouth,score
 Anothernewplayer,http://localhost/WebCourseWork/assets/emoji-assets/skin/green.png,http://localhost/WebCourseWork/assets/emoji-assets/eyes/closed.png,http://localhost/WebCourseWork/assets/emoji-assets/mouth/open.png,184
-Anothernewplayer,http://localhost/WebCourseWork/assets/emoji-assets/skin/green.png,http://localhost/WebCourseWork/assets/emoji-assets/eyes/closed.png,http://localhost/WebCourseWork/assets/emoji-assets/mouth/open.png,179
-Anothernewplayer,http://localhost/WebCourseWork/assets/emoji-assets/skin/green.png,http://localhost/WebCourseWork/assets/emoji-assets/eyes/closed.png,http://localhost/WebCourseWork/assets/emoji-assets/mouth/open.png,168
-Anothernewplayer,http://localhost/WebCourseWork/assets/emoji-assets/skin/green.png,http://localhost/WebCourseWork/assets/emoji-assets/eyes/closed.png,http://localhost/WebCourseWork/assets/emoji-assets/mouth/open.png,36
+Finn,http://localhost/WebCourseWork/assets/emoji-assets/skin/green.png,http://localhost/WebCourseWork/assets/emoji-assets/eyes/closed.png,http://localhost/WebCourseWork/assets/emoji-assets/mouth/open.png,184
+Finn,http://localhost/WebCourseWork/assets/emoji-assets/skin/green.png,http://localhost/WebCourseWork/assets/emoji-assets/eyes/closed.png,http://localhost/WebCourseWork/assets/emoji-assets/mouth/open.png,175
+Finn,http://localhost/WebCourseWork/assets/emoji-assets/skin/green.png,http://localhost/WebCourseWork/assets/emoji-assets/eyes/closed.png,http://localhost/WebCourseWork/assets/emoji-assets/mouth/open.png,114
 Anothernewplayer,http://localhost/WebCourseWork/assets/emoji-assets/skin/green.png,http://localhost/WebCourseWork/assets/emoji-assets/eyes/closed.png,http://localhost/WebCourseWork/assets/emoji-assets/mouth/open.png,25
 user3,assets/emoji-assets/skin/yellow.png,assets/emoji-assets/eyes/laughing.png,assets/emoji-assets/mouth/teeth.png,0
 user1,assets/emoji-assets/skin/green.png,assets/emoji-assets/eyes/laughing.png,assets/emoji-assets/mouth/teeth.png,0
@@ -15,3 +15,4 @@ user1,assets/emoji-assets/skin/green.png,assets/emoji-assets/eyes/laughing.png,a
 user2,assets/emoji-assets/skin/red.png,assets/emoji-assets/eyes/laughing.png,assets/emoji-assets/mouth/teeth.png,0
 user3,assets/emoji-assets/skin/yellow.png,assets/emoji-assets/eyes/laughing.png,assets/emoji-assets/mouth/teeth.png,0
 user3,assets/emoji-assets/skin/yellow.png,assets/emoji-assets/eyes/laughing.png,assets/emoji-assets/mouth/teeth.png,0
+,undefined,undefined,undefined,NaN
