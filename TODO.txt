@@ -1,7 +1,7 @@
 TODO
 - Test regex
 - test leaderboard
-- Add leaderboardafter level if highscore
+- dynamically show score
 - fix background
 - fix score
 

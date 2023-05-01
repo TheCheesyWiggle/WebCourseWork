@@ -5,8 +5,10 @@
     // Path to the CSV file to be overwritten
     $csvFile = 'leaderboard.csv';
 
+    // Convert the CSV data to UTF-8 encoding
+    $utf8Data = utf8_encode($csvData);
     // Write the new CSV data to the file
-    file_put_contents($csvFile, $csvData);
+    file_put_contents($csvFile, $utf8Data);
 
     // Send a success response
     echo 'CSV file overwritten successfully!';

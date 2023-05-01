@@ -1,9 +1,12 @@
+
+
 // Get DOM elements
 let cards = document.querySelectorAll('.card');
 const startBtn = document.getElementById('start-btn');
 const resetBtn = document.getElementById('reset-btn');
 const attemptsDisplay = document.getElementById('attempts');
 const scoreDisplay = document.getElementById('score');
+const totalScoreDisplay = document.getElementById('totalScore');
 const lookingDisplay = document.getElementById('looking');
 const currentLevelDisplay = document.getElementById('level');
 const gameBoard = document.getElementById('game-board');
@@ -45,7 +48,6 @@ const levels = [
 function start() {
     //sets current level to 0
     currentLevel = 0;
-    startTimer();
     genCards();
     readCSVFile();
     hideBtn();
@@ -62,6 +64,7 @@ function shuffle() {
 
 // Setup game function
 function setupGame() {
+    startTimer()
     attempts = 1;
     score = 0;
     count = 0;
@@ -73,6 +76,7 @@ function setupGame() {
     createBoard(genCards());
     shuffle();
     resetCards();
+    document.getElementById("container").style.backgroundColor = "#FFD700";
 }
 
 function createBoard(setupCards) {
@@ -145,13 +149,7 @@ function howManyToMatch(){
       } 
 }
 
-function checkMatch() {
-    //let currentTime = new Date().getTime();
-    //const elapsedTime = currentTime - startTime;
-    //if(calcScore(elapsedTime)>leaderboard[currentLevel].score){
-    //    document.getElementById("container").style.backgroundColor = "#FFD700";
-    //    document.getElementById("attempts").textContent = calcScore(elapsedTime);
-    //}
+function checkMatch() { 
     let matched = true;
     for (let i = 0; i < flippedCards.length - 1; i++) {
         console.log("[CHECK MATCH] card 1: "+flippedCards[i].dataset.card);
@@ -169,9 +167,6 @@ function checkMatch() {
     document.getElementById("attempts").textContent = attempts;
     if (matched) {
         // All cards match
-        let currentTime = new Date().getTime();
-        const elapsedTime = currentTime - startTime;
-        calcScore(elapsedTime);
         count+=flippedCards.length;
         flippedCards = [];
         checkEndLevel();
@@ -211,20 +206,31 @@ function checkEndLevel() {
         // Redirects the player
         window.location.href = "./pairs.php";
     } else if (count === levels[currentLevel].noCards) {
-        const elapsedTime = stopTimer();
-        calcScore(elapsedTime)
-        document.getElementById("score").textContent = score;
+        updateLeaderboard();
         scores.push(score);
-        count = 0;
         currentLevel++;
         setupGame();
     }
 }
 
-function calcScore(elapsedTime){
-    score = currentLevel*1000+Math.round((attempts*-100)- elapsedTime);
-    if(score<=0){
-        score = 0;
+function calcScore(){
+    if(!(currentLevel===undefined)){
+        const elapsedTime =  getElapsedTime()/1000;
+        console.log("[SCORE] Elapsed Time:"+getElapsedTime());
+        score = Math.round(((1/attempts)*100)+((Math.pow(Math.E,-0.15*elapsedTime)*100)));
+        scoreDisplay.textContent = score;
+        console.log("[SCORE]"+score);
+        if(score<=0){
+            score = 0;
+        }
+        let total = 0;
+        scores.forEach(score=>{
+            total += score;
+        });
+        totalScoreDisplay.textContent = total;
+        if(score<=leaderboard[currentLevel].score){
+            document.getElementById("container").style.backgroundColor = "grey";
+        }
     }
 }
 
@@ -250,8 +256,7 @@ function updateLeaderboard(){
                 //update csv file
                 overwriteCSVFile();
                 console.log("[CSV] Finished adding to leaderboard...");
-                alert("HELLO");
-                window.location.href = "./leaderboard.php";
+                //window.location.href = "./leaderboard.php";
             }
             else {
                 alert("Page will reset");
@@ -260,8 +265,11 @@ function updateLeaderboard(){
             }
         }
     }
-    alert("Not using registered session so the page will reset");
-    window.location.href = "./pairs.php";
+    else{
+        alert("Not using registered session so the page will reset");
+        window.location.href = "./pairs.php";
+    }
+   
 }
 
 function checkEndGame(){
@@ -284,7 +292,8 @@ function parseCSV(csv) {
 
     for (let i = 1; i < lines.length; i++) {
         const currentLine = lines[i].split(',');
-        const newUser = createUser(currentLine[0],currentLine[1],currentLine[2],currentLine[3],currentLine[4]);
+        console.log("[LINE]"+lines[i].type);
+        const newUser = createUser(currentLine[0],currentLine[1],currentLine[2],currentLine[3],parseInt(currentLine[4]));
 
         leaderboard.push(newUser);
     }
@@ -294,11 +303,14 @@ function parseCSV(csv) {
 function readCSVFile() {
     const xhr = new XMLHttpRequest();
 
-    xhr.open('GET', file);
-    xhr.responseType = 'text';
+    xhr.open('GET', file, true);
+    xhr.responseType =  'arraybuffer';
 
     xhr.onload = function() {
-        const csvData = xhr.response;
+        var arrayBuffer = xhr.response;
+        var decoder = new TextDecoder('utf-8');
+        const csvData = decoder.decode(arrayBuffer);;
+        console.log("[CSVDATA]",typeof csvData)
         const parsedData = parseCSV(csvData);
         return parsedData;
     };
@@ -327,6 +339,7 @@ function overwriteCSVFile() {
         },
         error: function(xhr, status, error) {
         console.error('AJAX Error:', error);
+        alert('AJAX Error:'+ error);
         }
     });
 }
@@ -435,23 +448,28 @@ function getCookie(cname) {
 }
 
 function startTimer(){
+    console.log("[TIMER] Start");
     // set the start time to the current time
-  startTime = new Date().getTime();
+    startTime = new Date().getTime();
 
-  // start the timer and execute the callback function every second
-  timerInterval = setInterval(() => {
+}
+
+function getElapsedTime(){
+    // get the final elapsed time and display it in the UI
     const currentTime = new Date().getTime();
-  }, 1000);
+    return currentTime - startTime;
 }
 
-function stopTimer(){
-    // stop the timer
-  clearInterval(timerInterval);
-
-  // get the final elapsed time and display it in the UI
-  const currentTime = new Date().getTime();
-  return currentTime - startTime;
-}
+function updateScore() {
+    // Update the element's content here
+    calcScore();// Example: Update with current time
+  }
+  
+  // Call the update function immediately
+  updateScore();
+  
+  // Update the element every 0.5 seconds
+  setInterval(updateScore, 500);
 
 
 // Event Listeners

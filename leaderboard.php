@@ -92,73 +92,57 @@
         document.getElementById("table").innerHTML= html;
     }
 
-function parseCSV(csv) {
-    emptyLeaderboard()
-    const lines = csv.split('\n');
-    const headers = lines[0].split(',');
+    function parseCSV(csv) {
+        emptyLeaderboard()
+        const lines = csv.split('\n');
+        const headers = lines[0].split(',');
 
-    for (let i = 1; i < lines.length; i++) {
-        const currentLine = lines[i].split(',');
-        const newUser = createUser(currentLine[0],currentLine[1],currentLine[2],currentLine[3],currentLine[4]);
-
-        leaderboard.push(newUser);
+        for (let i = 1; i < lines.length; i++) {
+            const currentLine = lines[i].split(',');
+            const newUser = createUser(currentLine[0],currentLine[1],currentLine[2],currentLine[3],currentLine[4]);
+            leaderboard.push(newUser);
+            console.log("[LEADERBOARD] Level 1: "+ leaderboard[i-1].level+" User: "+leaderboard[i-1].username);
+        }
+        displayLeaderboard();
     }
-    //sortLeaderboard();
-    displayLeaderboard();
-}
 
-function readCSVFile() {
-    file = "leaderboard.csv";
-    const xhr = new XMLHttpRequest();
+    function readCSVFile() {
+        file = "leaderboard.csv";
+        var timestamp = new Date().getTime(); // Generate a unique timestamp
 
-    xhr.open('GET', file);
-    xhr.responseType = 'text';
+        // Append the timestamp as a query parameter to the CSV URL
+        var updatedCsvUrl = file + '?t=' + timestamp;
+        const xhr = new XMLHttpRequest();
 
-    xhr.onload = function() {
-        const csvData = xhr.response;
-        const parsedData = parseCSV(csvData);
-        return parsedData;
-    };
+        xhr.open('GET', updatedCsvUrl);
+        xhr.responseType = 'text';
 
-    xhr.send();
-}
+        xhr.onload = function() {
+            const csvData = xhr.response;
+            const parsedData = parseCSV(csvData);
+            return parsedData;
+        };
 
-function createUser(username, skinURL, eyesURL, mouthURL, score){
-    console.log("[JS] Creating user...");
-    let user = {
-        "username": username,
-        "skin": skinURL,
-        "eyes": eyesURL,
-        "mouth": mouthURL,
-        "score":score,
+        xhr.send();
     }
-    return user;
-}
 
-function emptyLeaderboard(){
-    leaderboard.forEach(user=>{
-        leaderboard.pop(user);
-    });
-}
+    function createUser(username, skinURL, eyesURL, mouthURL, score){
+        console.log("[JS] Creating user...");
+        let user = {
+            "username": username,
+            "skin": skinURL,
+            "eyes": eyesURL,
+            "mouth": mouthURL,
+            "score":score,
+        }
+        return user;
+    }
 
-function populateLeaderboard(XMLresponse){
-    if (XMLresponse !== undefined && XMLresponse !== null) {
-            XMLresponse.forEach(element =>{
-            leaderboard.push(createUser(element.username, element.skin, element.eyes, element.mouth, element.score))
+    function emptyLeaderboard(){
+        leaderboard.forEach(user=>{
+            leaderboard.pop(user);
         });
     }
-    else{
-        console.log("[POPULATE] ERROR");
-    }
-    console.log("[LEADERBOARD] Leaderboard: "+leaderboard)
-    
-}
-
-//function sortLeaderboard(){
-//    leaderboard.sort((a, b) => {
-//        return a.score - b.score;
-//    });
-//}
 
 readCSVFile();
 

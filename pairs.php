@@ -121,6 +121,7 @@
                 <button id="start-btn">Start the game</button>
                 <p>Attempts: <span id="attempts">1</span></p>
                 <p>Score: <span id="score">0</span></p>
+                <p>Total score: <span id="totalScore">0</span></p>
                 <p>Looking for: <span id="looking">Pairs</span></p>
                 <p>Current Level: <span id="level">1</span></p>
                 <div id="game-board">
