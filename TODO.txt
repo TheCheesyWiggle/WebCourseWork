@@ -1,6 +1,9 @@
 TODO
 - Test regex
 - test leaderboard
+- Add leaderboardafter level if highscore
+- fix background
+- fix score
 
 COMMAND
 scp -r C:\Users\Finn\xampp\htdocs\WebCourseWork remote_username@10.10.0.2:/remote/directory

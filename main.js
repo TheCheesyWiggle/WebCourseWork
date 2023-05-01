@@ -146,9 +146,12 @@ function howManyToMatch(){
 }
 
 function checkMatch() {
-    if(calcScore>leaderboard[currentLevel].score){
-        document.getElementById("container").style.backgroundColor = "#FFD700";
-    }
+    //let currentTime = new Date().getTime();
+    //const elapsedTime = currentTime - startTime;
+    //if(calcScore(elapsedTime)>leaderboard[currentLevel].score){
+    //    document.getElementById("container").style.backgroundColor = "#FFD700";
+    //    document.getElementById("attempts").textContent = calcScore(elapsedTime);
+    //}
     let matched = true;
     for (let i = 0; i < flippedCards.length - 1; i++) {
         console.log("[CHECK MATCH] card 1: "+flippedCards[i].dataset.card);

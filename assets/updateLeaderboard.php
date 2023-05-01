@@ -3,7 +3,7 @@
     $csvData = $_POST['csvData'];
     
     // Path to the CSV file to be overwritten
-    $csvFile = 'data.csv';
+    $csvFile = 'leaderboard.csv';
 
     // Write the new CSV data to the file
     file_put_contents($csvFile, $csvData);

@@ -1,5 +1,5 @@
 <style>
-    .container {
+    #container {
         max-width: 600px;
         margin: 0 auto;
         text-align: center;
@@ -116,7 +116,7 @@
             <?php
             include_once("navbar.php");
             ?>
-            <div class="container">
+            <div id="container">
                 <h1>Memory Game</h1>
                 <button id="start-btn">Start the game</button>
                 <p>Attempts: <span id="attempts">1</span></p>
